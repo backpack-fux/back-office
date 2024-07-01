@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Command Center",
+  name: "Back Office",
   description: "Weapons of math destruction",
   navItems: [
     {
@@ -65,5 +65,12 @@ export const siteConfig = {
     docs: "https://docs-backpack-network.vercel.app/",
     discord: "https://discord.gg/fMf2CY5P",
     campaign: "https://fabric.xyz/",
+  },
+  partners: {
+    bridge: "/",
+    worldpay: "/",
+    rain: "/",
+    chase: "/",
+    stripe: "/",
   },
 };
