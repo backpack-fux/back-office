@@ -1,4 +1,6 @@
-import { Card, CardBody } from "@nextui-org/card";
+import { Card, CardBody, CardHeader } from "@nextui-org/card";
+import { Divider } from "@nextui-org/divider";
+import { Image } from "@nextui-org/image";
 import { useState } from "react";
 
 export default function PartnerTabs() {
@@ -55,14 +57,35 @@ export default function PartnerTabs() {
         ))}
       </div>
       <Card>
-        <CardBody>
+        <CardHeader>
           {tabs.map((tab) => (
             <div key={tab.id} className={activeTab === tab.id ? "block" : "hidden"}>
-              <h3 className="text-lg font-semibold">{tab.label} Payment Details</h3>
+              <h3 className="text-lg font-semibold">{tab.label} Services</h3>
               <p>{tab.content}</p>
             </div>
           ))}
-        </CardBody>
+        </CardHeader>
+        <Divider/>
+      <CardBody >
+      <Image
+          alt="Card background"
+          className="object-cover rounded-xl"
+          src="https://nextui.org/images/hero-card-complete.jpeg"
+          width={270}
+        />
+        <h2 className="text-lg font-semibold">Current Balance</h2>
+        <p>$420,690.42</p>
+        <h2 className="text-lg font-semibold">Functions</h2>
+        <ul>
+          <li>- Account Balance</li>
+          <li>- Account Transfers</li>
+        </ul>
+        <h2 className="text-lg font-semibold">Links</h2>
+        <ul>
+          <li>- Support via Slack</li>
+          <li>- Bridge docs</li>
+        </ul>
+      </CardBody>
       </Card>
     </div>
   );

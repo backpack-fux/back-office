@@ -1,11 +1,14 @@
-import { Card, CardBody } from "@nextui-org/card";
+import { Card, CardHeader } from "@nextui-org/card";
+import { Divider } from "@nextui-org/divider";
+import { Select, SelectItem } from "@nextui-org/select";
 import { useState } from "react";
+import { prefundedCurrencyOptions, prefundedNetworkOptions } from "../data/bridge";
 
 export default function PrefundedTransferTabs() {
   const tabs = [
     {
-      id: "setup",
-      label: "Setup",
+      id: "transaction",
+      label: "Transaction",
       content: "Configure amount and account reference for the transfer"
     },
     {
@@ -40,14 +43,31 @@ export default function PrefundedTransferTabs() {
         ))}
       </div>
       <Card>
-        <CardBody>
+        <CardHeader>
           {tabs.map((tab) => (
             <div key={tab.id} className={activeTab === tab.id ? "block" : "hidden"}>
-              <h3 className="text-lg font-semibold">{tab.label} Payment Details</h3>
+              <h3 className="text-lg font-semibold">{tab.label} Details</h3>
               <p>{tab.content}</p>
             </div>
           ))}
-        </CardBody>
+        </CardHeader>
+        <Divider />
+        <Select
+      items={prefundedCurrencyOptions}
+      label="Currency Options"
+      placeholder="Select a currency"
+      className="max-w-xs"
+    >
+      {(prefundedCurrencyOptions) => <SelectItem key={prefundedCurrencyOptions.key}>{prefundedCurrencyOptions.label}</SelectItem>}
+    </Select>
+        <Select
+      items={prefundedNetworkOptions}
+      label="Network Options"
+      placeholder="Select a network as your payment rail"
+      className="max-w-xs"
+    >
+      {(prefundedNetworkOptions) => <SelectItem key={prefundedNetworkOptions.key}>{prefundedNetworkOptions.label}</SelectItem>}
+    </Select>
       </Card>
     </div>
   );
