@@ -27,3 +27,8 @@ export const prefundedNetworkOptions = [
     {key: "stl", label: "Stellar"},
     {key: "trn", label: "Tron"},
 ]
+
+export const sourceAccountsTemp = [
+    {key: "bp-chase", label: "Backpack Chase"},
+    {key: "0x6b...1234", label: "USDC - EVM"},
+]

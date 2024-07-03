@@ -2,7 +2,7 @@ import { Card, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
 import { Select, SelectItem } from "@nextui-org/select";
 import { useState } from "react";
-import { prefundedCurrencyOptions, prefundedNetworkOptions } from "../data/bridge";
+import { prefundedCurrencyOptions, prefundedNetworkOptions, sourceAccountsTemp } from "../data/bridge";
 
 export default function PrefundedTransferTabs() {
   const tabs = [
@@ -53,21 +53,29 @@ export default function PrefundedTransferTabs() {
         </CardHeader>
         <Divider />
         <Select
-      items={prefundedCurrencyOptions}
-      label="Currency Options"
-      placeholder="Select a currency"
-      className="max-w-xs"
-    >
-      {(prefundedCurrencyOptions) => <SelectItem key={prefundedCurrencyOptions.key}>{prefundedCurrencyOptions.label}</SelectItem>}
-    </Select>
+          items={prefundedCurrencyOptions}
+          label="Currency Options"
+          placeholder="Select a currency"
+          className="max-w-xs"
+        >
+          {(prefundedCurrencyOptions) => <SelectItem key={prefundedCurrencyOptions.key}>{prefundedCurrencyOptions.label}</SelectItem>}
+        </Select>
         <Select
-      items={prefundedNetworkOptions}
-      label="Network Options"
-      placeholder="Select a network as your payment rail"
-      className="max-w-xs"
-    >
-      {(prefundedNetworkOptions) => <SelectItem key={prefundedNetworkOptions.key}>{prefundedNetworkOptions.label}</SelectItem>}
-    </Select>
+          items={prefundedNetworkOptions}
+          label="Network Options"
+          placeholder="Select a network as your payment rail"
+          className="max-w-xs"
+        >
+          {(prefundedNetworkOptions) => <SelectItem key={prefundedNetworkOptions.key}>{prefundedNetworkOptions.label}</SelectItem>}
+        </Select>
+        <Select
+          items={sourceAccountsTemp}
+          label="Account Options"
+          placeholder="Choose your source account"
+          className="max-w-xs"
+        >
+          {(sourceAccountsTemp) => <SelectItem key={sourceAccountsTemp.key}>{sourceAccountsTemp.label}</SelectItem>}
+        </Select>
       </Card>
     </div>
   );
