@@ -1,6 +1,7 @@
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
 import { Image } from "@nextui-org/image";
+import { Link } from "@nextui-org/link";
 import { Tab, Tabs } from "@nextui-org/tabs";
 
 export default function PartnerTabs() {
@@ -11,8 +12,12 @@ export default function PartnerTabs() {
       content: "Bridge is used for on-ramps and off-ramps of stable coins",
       balance: "$420,690.42",
       functions: ["Account Balance", "Account Transfers"],
-      links: ["Support via Slack", "Bridge docs"],
-      image: "https://nextui.org/images/hero-card-complete.jpeg"
+      links: [
+        { text: "Support via Slack", url: "https://app.slack.com/client/T05E1T4PBFW/C05EP0L2W7J?selected_team_id=T05E1T4PBFW" },
+        { text: "Bridge docs", url: "https://docs.bridge.xyz" },
+        { text: "Bridge dashboard", url: "https://dashboard.bridge.xyz" }
+      ],
+      image: "/bridge-logo-white.svg"
     },
     {
       id: "worldpay",
@@ -20,7 +25,10 @@ export default function PartnerTabs() {
       content: "Worldpay provides payment processing services for card networks",
       balance: "$1,234,567.89",
       functions: ["Process Payments", "Refunds"],
-      links: ["Worldpay Support", "API Documentation"],
+      links: [
+        { text: "Worldpay Support", url: "https://www.fisglobal.com/en/merchant-solutions-worldpay/support" },
+        { text: "API Documentation", url: "https://developer.worldpay.com/docs" }
+      ],
       image: "https://example.com/worldpay-image.jpg"
     },
     {
@@ -29,7 +37,10 @@ export default function PartnerTabs() {
       content: "Rain Cards provides card issuance for business credit cards that spend like prepaid cards",
       balance: "$987,654.32",
       functions: ["Issue Cards", "Manage Limits"],
-      links: ["Rain Support Center", "Card Management Portal"],
+      links: [
+        { text: "Rain Support Center", url: "https://www.rainfi.com/support" },
+        { text: "Card Management Portal", url: "https://dashboard.rainfi.com" }
+      ],
       image: "https://example.com/rain-image.jpg"
     },
     {
@@ -38,7 +49,10 @@ export default function PartnerTabs() {
       content: "Chase provides various banking and payment services",
       balance: "$5,678,901.23",
       functions: ["Wire Transfers", "ACH Payments"],
-      links: ["Chase Business Support", "Online Banking"],
+      links: [
+        { text: "Chase Business Support", url: "https://www.chase.com/business/customer-service" },
+        { text: "Online Banking", url: "https://secure.chase.com/web/auth/dashboard" }
+      ],
       image: "https://example.com/chase-image.jpg"
     },
     {
@@ -47,7 +61,10 @@ export default function PartnerTabs() {
       content: "1Konto offers on-ramps and off-ramps of crypto assets",
       balance: "€3,456,789.01",
       functions: ["Crypto Exchange", "Fiat Conversion"],
-      links: ["1Konto Help Center", "Trading Platform"],
+      links: [
+        { text: "1Konto Help Center", url: "https://1konto.com/help" },
+        { text: "Trading Platform", url: "https://trading.1konto.com" }
+      ],
       image: "https://example.com/1konto-image.jpg"
     },
     {
@@ -56,7 +73,10 @@ export default function PartnerTabs() {
       content: "They're like Bridge but smaller",
       balance: "$789,012.34",
       functions: ["Stablecoin Transfers", "Account Management"],
-      links: ["Brale Support", "Developer Docs"],
+      links: [
+        { text: "Brale Support", url: "https://brale.com/support" },
+        { text: "Developer Docs", url: "https://docs.brale.com" }
+      ],
       image: "https://example.com/brale-image.jpg"
     }
   ];
@@ -92,8 +112,18 @@ export default function PartnerTabs() {
                     </ul>
                     <h2 className="text-lg font-semibold mt-4">Links</h2>
                     <ul>
-                      {tab.links.map((link, index) => (
-                        <li key={index}>- {link}</li>
+                    {tab.links.map((link, index) => (
+                      <li key={index}>
+                        <Link
+                          href={link.url}
+                          isExternal
+                          showAnchorIcon
+                          underline="hover"
+                          color="primary"
+                          >
+                          {link.text}
+                        </Link>
+                      </li>
                       ))}
                     </ul>
                   </div>

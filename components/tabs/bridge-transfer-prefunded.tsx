@@ -1,5 +1,6 @@
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
+import { Input } from "@nextui-org/input";
 import { Select, SelectItem } from "@nextui-org/select";
 import { Tab, Tabs } from "@nextui-org/tabs";
 import { prefundedCurrencyOptions, prefundedNetworkOptions, sourceAccountsTemp } from "../data/bridge";
@@ -7,8 +8,8 @@ import { prefundedCurrencyOptions, prefundedNetworkOptions, sourceAccountsTemp }
 export default function PrefundedTransferTabs() {
   const tabs = [
     {
-      id: "transaction",
-      label: "Transaction",
+      id: "amount",
+      label: "Amount",
       content: "Configure amount and account reference for the transfer"
     },
     {
@@ -35,16 +36,15 @@ export default function PrefundedTransferTabs() {
               </CardHeader>
               <Divider />
               <CardBody>
-                {tab.id === "transaction" && (
+                {tab.id === "amount" && (
                   <>
-                    <Select
-                      items={prefundedCurrencyOptions}
-                      label="Transaction Amount"
-                      placeholder="Enter an amount in USD"
+                    <Input
+                      type="number"
+                      label="Amount"
+                      placeholder="$420.69"
                       className="max-w-xs"
                     >
-                      {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
-                    </Select>
+                    </Input>
                     <Select
                       items={prefundedNetworkOptions}
                       label="Bridge Account Number"
@@ -53,14 +53,13 @@ export default function PrefundedTransferTabs() {
                     >
                       {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
                     </Select>
-                    <Select
-                      items={prefundedNetworkOptions}
+                    <Input
+                      id="number"
                       label="Transfer Fee"
-                      placeholder="This is an optional fee that can be applied to the transaction"
+                      placeholder="$69.42"
                       className="max-w-xs"
                     >
-                      {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
-                    </Select>
+                    </Input>
                   </>
                 )}
                 {tab.id === "source" && (
