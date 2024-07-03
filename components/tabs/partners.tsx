@@ -38,8 +38,9 @@ export default function PartnerTabs() {
       balance: "$987,654.32",
       functions: ["Issue Cards", "Manage Limits"],
       links: [
-        { text: "Rain Support Center", url: "https://www.rainfi.com/support" },
-        { text: "Card Management Portal", url: "https://dashboard.rainfi.com" }
+        { text: "Rain support via Slack", url: "https://app.slack.com/client/T0207CDB4LB/C06H7P4RYN4?selected_team_id=T05E1T4PBFW" },
+        { text: "Rain Default Login", url: "https://use.raincards.xyz" },
+        { text: "Rain Docs", url: "https://docs.raincards.xyz" }
       ],
       image: "https://example.com/rain-image.jpg"
     },
