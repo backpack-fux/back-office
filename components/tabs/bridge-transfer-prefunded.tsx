@@ -1,7 +1,7 @@
-import { Card, CardHeader } from "@nextui-org/card";
+import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
 import { Select, SelectItem } from "@nextui-org/select";
-import { useState } from "react";
+import { Tab, Tabs } from "@nextui-org/tabs";
 import { prefundedCurrencyOptions, prefundedNetworkOptions, sourceAccountsTemp } from "../data/bridge";
 
 export default function PrefundedTransferTabs() {
@@ -12,7 +12,7 @@ export default function PrefundedTransferTabs() {
       content: "Configure amount and account reference for the transfer"
     },
     {
-      id: "sourc",
+      id: "source",
       label: "Source",
       content: "Configure the source of your transfer"
     },
@@ -23,60 +23,107 @@ export default function PrefundedTransferTabs() {
     }
   ];
 
-  const [activeTab, setActiveTab] = useState(tabs[0].id);
-    
   return (
     <div className="flex w-full flex-col">
-      <div className="flex space-x-2 mb-4">
+      <Tabs aria-label="Transfer options">
         {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            className={`px-4 py-2 rounded-t-lg ${
-              activeTab === tab.id
-                ? "bg-primary text-white"
-                : "bg-gray-200 text-gray-700"
-            }`}
-            onClick={() => setActiveTab(tab.id)}
-          >
-            {tab.label}
-          </button>
+          <Tab key={tab.id} title={tab.label}>
+            <Card>
+              <CardHeader className="flex flex-col items-start">
+                  <h3 className="text-lg font-semibold">{tab.label} Details</h3>
+                  <p className="text-small text-default-500">{tab.content}</p>
+              </CardHeader>
+              <Divider />
+              <CardBody>
+                {tab.id === "transaction" && (
+                  <>
+                    <Select
+                      items={prefundedCurrencyOptions}
+                      label="Transaction Amount"
+                      placeholder="Enter an amount in USD"
+                      className="max-w-xs"
+                    >
+                      {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
+                    </Select>
+                    <Select
+                      items={prefundedNetworkOptions}
+                      label="Bridge Account Number"
+                      placeholder="Its the bridge account number"
+                      className="max-w-xs"
+                    >
+                      {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
+                    </Select>
+                    <Select
+                      items={prefundedNetworkOptions}
+                      label="Transfer Fee"
+                      placeholder="This is an optional fee that can be applied to the transaction"
+                      className="max-w-xs"
+                    >
+                      {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
+                    </Select>
+                  </>
+                )}
+                {tab.id === "source" && (
+                  <>
+                    <Select
+                      items={sourceAccountsTemp}
+                      label="Source Account"
+                      placeholder="Choose your source account"
+                      className="max-w-xs"
+                    >
+                      {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
+                    </Select>
+                    <Select
+                      items={prefundedCurrencyOptions}
+                      label="Currency Options"
+                      placeholder="Select a currency"
+                      className="max-w-xs"
+                    >
+                      {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
+                    </Select>
+                    <Select
+                      items={prefundedNetworkOptions}
+                      label="Network Options"
+                      placeholder="Select a network as your payment rail"
+                      className="max-w-xs"
+                    >
+                      {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
+                    </Select>
+                  </>
+                )}
+                {tab.id === "destination" && (
+                  <>
+                    <Select
+                      items={sourceAccountsTemp}
+                      label="Destination Account"
+                      placeholder="Choose your destination account"
+                      className="max-w-xs"
+                    >
+                      {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
+                    </Select>
+                    <Select
+                      items={prefundedCurrencyOptions}
+                      label="Currency Options"
+                      placeholder="Select a currency"
+                      className="max-w-xs"
+                    >
+                      {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
+                    </Select>
+                    <Select
+                      items={prefundedNetworkOptions}
+                      label="Network Options"
+                      placeholder="Select a network as your payment rail"
+                      className="max-w-xs"
+                    >
+                      {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
+                    </Select>
+                  </>
+                )}
+              </CardBody>
+            </Card>
+          </Tab>
         ))}
-      </div>
-      <Card>
-        <CardHeader>
-          {tabs.map((tab) => (
-            <div key={tab.id} className={activeTab === tab.id ? "block" : "hidden"}>
-              <h3 className="text-lg font-semibold">{tab.label} Details</h3>
-              <p>{tab.content}</p>
-            </div>
-          ))}
-        </CardHeader>
-        <Divider />
-        <Select
-          items={prefundedCurrencyOptions}
-          label="Currency Options"
-          placeholder="Select a currency"
-          className="max-w-xs"
-        >
-          {(prefundedCurrencyOptions) => <SelectItem key={prefundedCurrencyOptions.key}>{prefundedCurrencyOptions.label}</SelectItem>}
-        </Select>
-        <Select
-          items={prefundedNetworkOptions}
-          label="Network Options"
-          placeholder="Select a network as your payment rail"
-          className="max-w-xs"
-        >
-          {(prefundedNetworkOptions) => <SelectItem key={prefundedNetworkOptions.key}>{prefundedNetworkOptions.label}</SelectItem>}
-        </Select>
-        <Select
-          items={sourceAccountsTemp}
-          label="Account Options"
-          placeholder="Choose your source account"
-          className="max-w-xs"
-        >
-          {(sourceAccountsTemp) => <SelectItem key={sourceAccountsTemp.key}>{sourceAccountsTemp.label}</SelectItem>}
-        </Select>
-      </Card>
+      </Tabs>
     </div>
   );
-};
+}

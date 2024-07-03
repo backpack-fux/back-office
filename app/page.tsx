@@ -5,7 +5,7 @@
 import { subtitle, title } from "@/components/primitives";
 import dynamic from "next/dynamic";
 
-const PaymentTabs = dynamic(() => import("@/components/tabs/partners"), {
+const PartnerTabs = dynamic(() => import("@/components/tabs/partners"), {
   ssr: false,
 });
 
@@ -21,13 +21,17 @@ export default function Home() {
         <h1 className={title({ color: "violet" })}>Stations&nbsp;</h1>
         <br />
         <h2 className={subtitle({ class: "mt-4" })}>
-        Heads down, keep building
+          Heads down, keep building
         </h2>
       </div>
 
-      <div className="w-full max-w-3xl mt-8">
-        <PaymentTabs />
-        <PrefundedTransferTabs />
+      <div className="w-full max-w-7xl mt-8 flex flex-col md:flex-row gap-4">
+        <div className="w-full md:w-1/2">
+          <PartnerTabs />
+        </div>
+        <div className="w-full md:w-1/2">
+          <PrefundedTransferTabs />
+        </div>
       </div>
     </section>
   );
