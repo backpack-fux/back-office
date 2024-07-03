@@ -27,9 +27,9 @@ export default function PartnerTabs() {
       functions: ["Process Payments", "Refunds"],
       links: [
         { text: "Worldpay Support", url: "https://www.fisglobal.com/en/merchant-solutions-worldpay/support" },
-        { text: "API Documentation", url: "https://developer.worldpay.com/docs" }
+        { text: "API Documentation", url: "https://developer.worldpay.com" }
       ],
-      image: "https://example.com/worldpay-image.jpg"
+      image: "/worldpay-logo.png"
     },
     {
       id: "rain",
