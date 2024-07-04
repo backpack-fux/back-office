@@ -1,7 +1,5 @@
 "use client"
 
-
-//import PaymentTabs from "@/components/payment-tabs";
 import { subtitle, title } from "@/components/primitives";
 import dynamic from "next/dynamic";
 
@@ -24,14 +22,8 @@ export default function Home() {
           Heads down, keep building
         </h2>
       </div>
-
-      <div className="w-full max-w-7xl mt-8 flex flex-col md:flex-row gap-4">
-        <div className="w-full md:w-1/2">
-          <PartnerTabs />
-        </div>
-        <div className="w-full md:w-1/2">
-          <PrefundedTransferTabs />
-        </div>
+      <div className="w-full max-w-7xl mt-8 flex gap-4">
+        <PartnerTabs />
       </div>
     </section>
   );

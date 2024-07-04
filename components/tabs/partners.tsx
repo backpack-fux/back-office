@@ -1,8 +1,10 @@
+import PartnerFunctions from '@/components/tabs/partner-functions';
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
 import { Image } from "@nextui-org/image";
 import { Link } from "@nextui-org/link";
 import { Tab, Tabs } from "@nextui-org/tabs";
+import { useState } from 'react';
 
 export default function PartnerTabs() {
   const tabs = [
@@ -82,58 +84,69 @@ export default function PartnerTabs() {
     }
   ];
 
+  const [selectedPartner, setSelectedPartner] = useState<string>(tabs[0].id);
+
   return (
-    <div className="flex w-full flex-col">
-      <Tabs aria-label="Partner options">
-        {tabs.map((tab) => (
-          <Tab key={tab.id} title={tab.label}>
-            <Card>
-              <CardHeader className="flex flex-col items-start">
-                <h3 className="text-lg font-semibold">{tab.label} Services</h3>
-                <p className="text-small text-default-500">{tab.content}</p>
-              </CardHeader>
-              <Divider />
-              <CardBody>
-                <div className="flex flex-row gap-4">
-                  <div className="w-1/3">
-                    <Image
-                      alt={`${tab.label} background`}
-                      className="object-cover rounded-xl w-full h-full"
-                      src={tab.image}
-                    />
-                  </div>
-                  <div className="w-2/3 flex flex-col">
-                    <h2 className="text-lg font-semibold">Current Balance</h2>
-                    <p>{tab.balance}</p>
-                    <h2 className="text-lg font-semibold mt-4">Functions</h2>
-                    <ul>
-                      {tab.functions.map((func, index) => (
-                        <li key={index}>- {func}</li>
-                      ))}
-                    </ul>
-                    <h2 className="text-lg font-semibold mt-4">Links</h2>
-                    <ul>
-                    {tab.links.map((link, index) => (
-                      <li key={index}>
-                        <Link
-                          href={link.url}
-                          isExternal
-                          showAnchorIcon
-                          underline="hover"
-                          color="primary"
+    <div className="flex w-full flex-col md:flex-row gap-4">
+      <div className="w-full md:w-1/2">
+        <Tabs 
+          aria-label="Partner options" 
+          selectedKey={selectedPartner}
+          onSelectionChange={(key) => setSelectedPartner(key as string)}
+        >
+          {tabs.map((tab) => (
+            <Tab key={tab.id} title={tab.label}>
+              <Card>
+                <CardHeader className="flex flex-col items-start">
+                  <h3 className="text-lg font-semibold">{tab.label} Services</h3>
+                  <p className="text-small text-default-500">{tab.content}</p>
+                </CardHeader>
+                <Divider />
+                <CardBody>
+                  <div className="flex flex-col md:flex-row gap-4">
+                    <div className="w-full md:w-1/3">
+                      <Image
+                        alt={`${tab.label} background`}
+                        className="object-cover rounded-xl w-full h-full"
+                        src={tab.image}
+                      />
+                    </div>
+                    <div className="w-full md:w-2/3 flex flex-col">
+                      <h2 className="text-lg font-semibold">Current Balance</h2>
+                      <p>{tab.balance}</p>
+                      <h2 className="text-lg font-semibold mt-4">Functions</h2>
+                      <ul>
+                        {tab.functions.map((func, index) => (
+                          <li key={index}>- {func}</li>
+                        ))}
+                      </ul>
+                      <h2 className="text-lg font-semibold mt-4">Links</h2>
+                      <ul>
+                      {tab.links.map((link, index) => (
+                        <li key={index}>
+                          <Link
+                            href={link.url}
+                            isExternal
+                            showAnchorIcon
+                            underline="hover"
+                            color="primary"
                           >
-                          {link.text}
-                        </Link>
-                      </li>
+                            {link.text}
+                          </Link>
+                        </li>
                       ))}
-                    </ul>
+                      </ul>
+                    </div>
                   </div>
-                </div>
-              </CardBody>
-            </Card>
-          </Tab>
-        ))}
-      </Tabs>
+                </CardBody>
+              </Card>
+            </Tab>
+          ))}
+        </Tabs>
+      </div>
+      <div className="w-full md:w-1/2">
+        <PartnerFunctions selectedPartner={selectedPartner} />
+      </div>
     </div>
   );
 }
