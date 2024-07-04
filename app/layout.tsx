@@ -3,7 +3,8 @@ import { Link } from "@nextui-org/link";
 import clsx from "clsx";
 import { Metadata, Viewport } from "next";
 
-import { Providers } from "./providers";
+import { NextUiProvider } from "@/providers/nextui";
+import { NeynarProvider } from "@/providers/neynar";
 
 import { Navbar } from "@/components/navbar";
 import { fontSans } from "@/config/fonts";
@@ -41,7 +42,8 @@ export default function RootLayout({
           fontSans.variable,
         )}
       >
-        <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+        <NextUiProvider themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+          <NeynarProvider>
           <div className="relative flex flex-col h-screen">
             <Navbar />
             <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
@@ -59,7 +61,8 @@ export default function RootLayout({
               </Link>
             </footer>
           </div>
-        </Providers>
+          </NeynarProvider>
+        </NextUiProvider>
       </body>
     </html>
   );

@@ -2,9 +2,9 @@
 
 import { subtitle, title } from "@/components/primitives";
 import { SignInModal } from "@/components/siwn";
-import { useDisclosure } from "@nextui-org/modal";
+import { useNeynarContext } from "@neynar/react";
 import dynamic from "next/dynamic";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const PartnerTabs = dynamic(() => import("@/components/tabs/partners"), {
   ssr: false,
@@ -15,19 +15,24 @@ const PrefundedTransferTabs = dynamic(() => import("@/components/tabs/bridge-tra
 });
 
 export default function Home() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  
+  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
+  const { user } = useNeynarContext();
+
   useEffect(() => {
-    // Check if user needs to sign in (e.g., no valid auth token)
-    const needsSignIn = true; // Replace with your actual auth check
-    if (needsSignIn) {
-      onOpen();
+    if (!user) {
+      setIsSignInModalOpen(true);
     }
-  }, [onOpen]);
+  }, [user]);
+
+  const handleCloseSignInModal = () => {
+    if (user) {
+      setIsSignInModalOpen(false);
+    }
+  };
   
   return (
     <>
-      <SignInModal isOpen={isOpen} onClose={onClose} />
+      <SignInModal isOpen={isSignInModalOpen} onClose={handleCloseSignInModal} />
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
         <div className="inline-block max-w-lg text-center justify-center">
           <h1 className={title()}>Battle&nbsp;</h1>
