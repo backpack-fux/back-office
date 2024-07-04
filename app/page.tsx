@@ -1,7 +1,10 @@
 "use client"
 
 import { subtitle, title } from "@/components/primitives";
+import { SignInModal } from "@/components/siwn";
+import { useDisclosure } from "@nextui-org/modal";
 import dynamic from "next/dynamic";
+import { useEffect } from "react";
 
 const PartnerTabs = dynamic(() => import("@/components/tabs/partners"), {
   ssr: false,
@@ -12,19 +15,32 @@ const PrefundedTransferTabs = dynamic(() => import("@/components/tabs/bridge-tra
 });
 
 export default function Home() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  
+  useEffect(() => {
+    // Check if user needs to sign in (e.g., no valid auth token)
+    const needsSignIn = true; // Replace with your actual auth check
+    if (needsSignIn) {
+      onOpen();
+    }
+  }, [onOpen]);
+  
   return (
-    <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-      <div className="inline-block max-w-lg text-center justify-center">
-        <h1 className={title()}>Battle&nbsp;</h1>
-        <h1 className={title({ color: "violet" })}>Stations&nbsp;</h1>
-        <br />
-        <h2 className={subtitle({ class: "mt-4" })}>
-          Heads down, keep building
-        </h2>
-      </div>
-      <div className="w-full max-w-7xl mt-8 flex gap-4">
-        <PartnerTabs />
-      </div>
-    </section>
+    <>
+      <SignInModal isOpen={isOpen} onClose={onClose} />
+      <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
+        <div className="inline-block max-w-lg text-center justify-center">
+          <h1 className={title()}>Battle&nbsp;</h1>
+          <h1 className={title({ color: "violet" })}>Stations&nbsp;</h1>
+          <br />
+          <h2 className={subtitle({ class: "mt-4" })}>
+            Heads down, keep building
+          </h2>
+        </div>
+        <div className="w-full max-w-7xl mt-8 flex gap-4">
+          <PartnerTabs />
+        </div>
+      </section>
+    </>
   );
 }
