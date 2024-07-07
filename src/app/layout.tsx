@@ -6,6 +6,7 @@ import { NextUiProvider } from "@/providers/nextui";
 
 import { fontSans } from "@/config/fonts";
 import { siteConfig } from "@/config/site";
+import { NeynarProvider } from "@/providers/neynar";
 
 export const metadata: Metadata = {
   title: {
@@ -27,11 +28,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head />
       <body className={clsx("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
         <NextUiProvider themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          {children}
+          <NeynarProvider>{children}</NeynarProvider>
         </NextUiProvider>
       </body>
     </html>
