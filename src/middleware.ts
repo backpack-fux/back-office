@@ -14,7 +14,7 @@ export function middleware(request: NextRequest) {
     }
   } else {
     // User is not authenticated
-    if (!isAuthRoute || isDashboardRoute) {
+    if (!isAuthRoute && isDashboardRoute) {
       // Redirect unauthenticated users to the auth route
       return NextResponse.redirect(new URL("/auth", request.url));
     }
