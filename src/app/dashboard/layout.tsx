@@ -1,5 +1,4 @@
 import { Link } from "@nextui-org/link";
-import { NeynarProvider } from "@/providers/neynar";
 import { Navbar } from "@/components/navbar";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
