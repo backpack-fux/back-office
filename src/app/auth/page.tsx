@@ -4,43 +4,52 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SignInModal } from "@/components/siwn";
 import { useNeynarContext } from "@neynar/react";
+import { PylonV2Service } from "@/services/PylonV2";
 import Cookies from "js-cookie";
-// import { NeynarAPIClient } from "@neynar/nodejs-sdk";
 
-// const client = new NeynarAPIClient(process.env.NEYNAR_API_KEY!);
+const pylonService = new PylonV2Service();
 
 export default function SignInPage() {
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
   const { user, isAuthenticated } = useNeynarContext();
   const router = useRouter();
 
-  // TODO
-  // const neynarUser = async () => {
-  //   const Nuser = await client.;
-  //   return Nuser;
-  // };
-
-  // TODO
-  // 1. Get user to sign in
-  // 2. Check if user is allowed to generate JWT
-  // 3. If allowed, generate JWT
-  // 4. If not allowed, show error message
-
+  /**
+   * 1. Get user to sign in
+   * 2. Check if user is allowed to generate JWT
+   * 3. If allowed, generate JWT
+   * 4. If not allowed, show error message
+   */
   useEffect(() => {
+    const generateToken = async (signer_uuid: string, fid: number) => {
+      try {
+        const response = await pylonService.generateAccessToken(signer_uuid, fid);
+
+        if (response.message) {
+          Cookies.set("pyv2_auth_token", response.message, {
+            expires: 1,
+            secure: true,
+          });
+          window.location.reload();
+        } else {
+          console.error("Failed to generate token:", response);
+        }
+      } catch (error) {
+        console.error("Error generating token:", error);
+        router.push("/not-found");
+      }
+    };
+
     if (!user) {
       setIsSignInModalOpen(true);
     } else if (isAuthenticated) {
-      // This is NOT prod solution. We need to verify this server-side.
-      Cookies.set("auth_token", user.signer_uuid, { expires: 7, secure: true });
-      window.location.reload();
+      if (user) {
+        generateToken(user.signer_uuid, user.fid);
+      } else {
+        console.error("User does not have a valid FID");
+      }
     }
   }, [user, router, isAuthenticated]);
 
-  const handleCloseSignInModal = () => {
-    if (user) {
-      setIsSignInModalOpen(false);
-    }
-  };
-
-  return <SignInModal isOpen={isSignInModalOpen} onClose={handleCloseSignInModal} />;
+  return <SignInModal isOpen={isSignInModalOpen} />;
 }
