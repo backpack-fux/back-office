@@ -1,10 +1,10 @@
-import PartnerFunctions from '@/components/tabs/partner-functions';
+import PartnerFunctions from "@/components/tabs/partner-functions";
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
 import { Image } from "@nextui-org/image";
 import { Link } from "@nextui-org/link";
 import { Tab, Tabs } from "@nextui-org/tabs";
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function PartnerTabs() {
   const tabs = [
@@ -15,11 +15,14 @@ export default function PartnerTabs() {
       balance: "$420,690.42",
       functions: ["Account Balance", "Account Transfers"],
       links: [
-        { text: "Support via Slack", url: "https://app.slack.com/client/T05E1T4PBFW/C05EP0L2W7J?selected_team_id=T05E1T4PBFW" },
+        {
+          text: "Support via Slack",
+          url: "https://app.slack.com/client/T05E1T4PBFW/C05EP0L2W7J?selected_team_id=T05E1T4PBFW",
+        },
         { text: "Bridge docs", url: "https://docs.bridge.xyz" },
-        { text: "Bridge dashboard", url: "https://dashboard.bridge.xyz" }
+        { text: "Bridge dashboard", url: "https://dashboard.bridge.xyz" },
       ],
-      image: "/bridge-logo-white.svg"
+      image: "/bridge-logo-white.svg",
     },
     {
       id: "worldpay",
@@ -28,23 +31,30 @@ export default function PartnerTabs() {
       balance: "$1,234,567.89",
       functions: ["Process Payments", "Refunds"],
       links: [
-        { text: "Worldpay Support", url: "https://www.fisglobal.com/en/merchant-solutions-worldpay/support" },
-        { text: "API Documentation", url: "https://developer.worldpay.com" }
+        {
+          text: "Worldpay Support",
+          url: "https://www.fisglobal.com/en/merchant-solutions-worldpay/support",
+        },
+        { text: "API Documentation", url: "https://developer.worldpay.com" },
       ],
-      image: "/worldpay-logo.png"
+      image: "/worldpay-logo.png",
     },
     {
       id: "rain",
       label: "Rain",
-      content: "Rain Cards provides card issuance for business credit cards that spend like prepaid cards",
+      content:
+        "Rain Cards provides card issuance for business credit cards that spend like prepaid cards",
       balance: "$987,654.32",
       functions: ["Issue Cards", "Manage Limits"],
       links: [
-        { text: "Rain support via Slack", url: "https://app.slack.com/client/T0207CDB4LB/C06H7P4RYN4?selected_team_id=T05E1T4PBFW" },
+        {
+          text: "Rain support via Slack",
+          url: "https://app.slack.com/client/T0207CDB4LB/C06H7P4RYN4?selected_team_id=T05E1T4PBFW",
+        },
         { text: "Rain Default Login", url: "https://use.raincards.xyz" },
-        { text: "Rain Docs", url: "https://docs.raincards.xyz" }
+        { text: "Rain Docs", url: "https://docs.raincards.xyz" },
       ],
-      image: "https://example.com/rain-image.jpg"
+      image: "https://example.com/rain-image.jpg",
     },
     {
       id: "chase",
@@ -54,9 +64,9 @@ export default function PartnerTabs() {
       functions: ["Wire Transfers", "ACH Payments"],
       links: [
         { text: "Chase Business Support", url: "https://www.chase.com/business/customer-service" },
-        { text: "Online Banking", url: "https://secure.chase.com/web/auth/dashboard" }
+        { text: "Online Banking", url: "https://secure.chase.com/web/auth/dashboard" },
       ],
-      image: "https://example.com/chase-image.jpg"
+      image: "https://example.com/chase-image.jpg",
     },
     {
       id: "1konto",
@@ -66,9 +76,9 @@ export default function PartnerTabs() {
       functions: ["Crypto Exchange", "Fiat Conversion"],
       links: [
         { text: "1Konto Help Center", url: "https://1konto.com/help" },
-        { text: "Trading Platform", url: "https://trading.1konto.com" }
+        { text: "Trading Platform", url: "https://trading.1konto.com" },
       ],
-      image: "https://example.com/1konto-image.jpg"
+      image: "https://example.com/1konto-image.jpg",
     },
     {
       id: "brale",
@@ -78,10 +88,10 @@ export default function PartnerTabs() {
       functions: ["Stablecoin Transfers", "Account Management"],
       links: [
         { text: "Brale Support", url: "https://brale.com/support" },
-        { text: "Developer Docs", url: "https://docs.brale.com" }
+        { text: "Developer Docs", url: "https://docs.brale.com" },
       ],
-      image: "https://example.com/brale-image.jpg"
-    }
+      image: "https://example.com/brale-image.jpg",
+    },
   ];
 
   const [selectedPartner, setSelectedPartner] = useState<string>(tabs[0].id);
@@ -89,8 +99,8 @@ export default function PartnerTabs() {
   return (
     <div className="flex w-full flex-col md:flex-row gap-4">
       <div className="w-full md:w-1/2">
-        <Tabs 
-          aria-label="Partner options" 
+        <Tabs
+          aria-label="Partner options"
           selectedKey={selectedPartner}
           onSelectionChange={(key) => setSelectedPartner(key as string)}
         >
@@ -122,19 +132,19 @@ export default function PartnerTabs() {
                       </ul>
                       <h2 className="text-lg font-semibold mt-4">Links</h2>
                       <ul>
-                      {tab.links.map((link, index) => (
-                        <li key={index}>
-                          <Link
-                            href={link.url}
-                            isExternal
-                            showAnchorIcon
-                            underline="hover"
-                            color="primary"
-                          >
-                            {link.text}
-                          </Link>
-                        </li>
-                      ))}
+                        {tab.links.map((link, index) => (
+                          <li key={index}>
+                            <Link
+                              href={link.url}
+                              isExternal
+                              showAnchorIcon
+                              underline="hover"
+                              color="primary"
+                            >
+                              {link.text}
+                            </Link>
+                          </li>
+                        ))}
                       </ul>
                     </div>
                   </div>

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { subtitle, title } from "@/components/primitives";
 import { SignInModal } from "@/components/siwn";
@@ -29,7 +29,7 @@ export default function Home() {
       setIsSignInModalOpen(false);
     }
   };
-  
+
   return (
     <>
       <SignInModal isOpen={isSignInModalOpen} onClose={handleCloseSignInModal} />
@@ -38,9 +38,7 @@ export default function Home() {
           <h1 className={title()}>Battle&nbsp;</h1>
           <h1 className={title({ color: "violet" })}>Stations&nbsp;</h1>
           <br />
-          <h2 className={subtitle({ class: "mt-4" })}>
-            Heads down, keep building
-          </h2>
+          <h2 className={subtitle({ class: "mt-4" })}>Heads down, keep building</h2>
         </div>
         <div className="w-full max-w-7xl mt-8 flex gap-4">
           <PartnerTabs />

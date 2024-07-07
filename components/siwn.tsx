@@ -1,6 +1,6 @@
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/modal";
 import { NeynarAuthButton, useNeynarContext } from "@neynar/react";
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 interface SignInModalProps {
   isOpen: boolean;
@@ -15,7 +15,7 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
   //   try {
   //     // TODO: Implement the Sign In With Neynar logic here
   //     // This will involve calling the Neynar API endpoints
-      
+
   //     // If authentication is successful, call onClose()
   //     onClose();
   //   } catch (error) {
@@ -36,8 +36,8 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
   }, [user, onClose]);
 
   return (
-    <Modal 
-      isOpen={isOpen} 
+    <Modal
+      isOpen={isOpen}
       onClose={() => {}} // Empty function to prevent default close behavior
       hideCloseButton
       isDismissable={false} // Prevents closing on outside click
@@ -49,7 +49,7 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
           <p>Please sign in to continue. You must authenticate to access the application.</p>
         </ModalBody>
         <ModalFooter>
-        <NeynarAuthButton />
+          <NeynarAuthButton />
         </ModalFooter>
       </ModalContent>
     </Modal>

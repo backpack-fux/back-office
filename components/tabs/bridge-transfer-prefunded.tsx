@@ -3,25 +3,29 @@ import { Divider } from "@nextui-org/divider";
 import { Input } from "@nextui-org/input";
 import { Select, SelectItem } from "@nextui-org/select";
 import { Tab, Tabs } from "@nextui-org/tabs";
-import { prefundedCurrencyOptions, prefundedNetworkOptions, sourceAccountsTemp } from "../data/bridge";
+import {
+  prefundedCurrencyOptions,
+  prefundedNetworkOptions,
+  sourceAccountsTemp,
+} from "../data/bridge";
 
 export default function PrefundedTransferTabs() {
   const tabs = [
     {
       id: "amount",
       label: "Amount",
-      content: "Configure amount and account reference for the transfer"
+      content: "Configure amount and account reference for the transfer",
     },
     {
       id: "source",
       label: "Source",
-      content: "Configure the source of your transfer"
+      content: "Configure the source of your transfer",
     },
     {
       id: "destination",
       label: "Destination",
-      content: "Configure the destination of your transfer"
-    }
+      content: "Configure the destination of your transfer",
+    },
   ];
 
   return (
@@ -31,8 +35,8 @@ export default function PrefundedTransferTabs() {
           <Tab key={tab.id} title={tab.label}>
             <Card>
               <CardHeader className="flex flex-col items-start">
-                  <h3 className="text-lg font-semibold">{tab.label} Details</h3>
-                  <p className="text-small text-default-500">{tab.content}</p>
+                <h3 className="text-lg font-semibold">{tab.label} Details</h3>
+                <p className="text-small text-default-500">{tab.content}</p>
               </CardHeader>
               <Divider />
               <CardBody>
@@ -43,8 +47,7 @@ export default function PrefundedTransferTabs() {
                       label="Amount"
                       placeholder="$420.69"
                       className="max-w-xs"
-                    >
-                    </Input>
+                    ></Input>
                     <Select
                       items={prefundedNetworkOptions}
                       label="Bridge Account Number"
@@ -58,8 +61,7 @@ export default function PrefundedTransferTabs() {
                       label="Transfer Fee"
                       placeholder="$69.42"
                       className="max-w-xs"
-                    >
-                    </Input>
+                    ></Input>
                   </>
                 )}
                 {tab.id === "source" && (

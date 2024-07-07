@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import PrefundedTransferTabs from './bridge-transfer-prefunded';
+import { useEffect, useState } from "react";
+import PrefundedTransferTabs from "./bridge-transfer-prefunded";
 
 interface PartnerFunctionsProps {
   selectedPartner: string;
@@ -10,25 +10,25 @@ export default function PartnerFunctions({ selectedPartner }: PartnerFunctionsPr
 
   useEffect(() => {
     switch (selectedPartner) {
-      case 'bridge':
+      case "bridge":
         setFunctionComponent(<PrefundedTransferTabs />);
         break;
       // Add cases for other partners here
-    //   case 'rain':
-    //     setFunctionComponent(<RainTransferTabs />);
-    //     break;
-    //   case 'worldpay':
-    //     setFunctionComponent(<WorldpayTransferTabs />);
-    //     break;
-    //   case 'chase':
-    //     setFunctionComponent(<ChaseTransferTabs />);
-    //     break;
-    //   case '1konto':
-    //     setFunctionComponent(<OneKontoTransferTabs />);
-    //     break;
-    //   case 'Brale':
-    //     setFunctionComponent(<BraleTransferTabs />);
-    //     break;
+      //   case 'rain':
+      //     setFunctionComponent(<RainTransferTabs />);
+      //     break;
+      //   case 'worldpay':
+      //     setFunctionComponent(<WorldpayTransferTabs />);
+      //     break;
+      //   case 'chase':
+      //     setFunctionComponent(<ChaseTransferTabs />);
+      //     break;
+      //   case '1konto':
+      //     setFunctionComponent(<OneKontoTransferTabs />);
+      //     break;
+      //   case 'Brale':
+      //     setFunctionComponent(<BraleTransferTabs />);
+      //     break;
       default:
         setFunctionComponent(null);
     }
