@@ -1,16 +1,13 @@
-import { Input } from "@nextui-org/input";
-import { Button } from "@nextui-org/button";
-import { Card } from "@nextui-org/card";
-import { Spacer } from "@nextui-org/spacer";
+"use client";
 
-export const SignIn = () => {
-  const onSubmit = (data: any) => {
-    console.log(data);
-  };
+import { NeynarAuthButton } from "@neynar/react";
 
+export function SignIn() {
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h1>Sign In</h1>
-    </div>
+    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
+        <NeynarAuthButton />
+      </div>
+    </main>
   );
-};
+}
