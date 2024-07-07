@@ -34,7 +34,7 @@ export class PylonV2Service {
     return (await response.json()).data;
   }
 
-  public async generateJWT(signerUuid: string, fid: number): Promise<GenerateJWTResponse> {
+  public async generateAccessToken(signerUuid: string, fid: number): Promise<GenerateJWTResponse> {
     return await this.request(`${this.apiBaseUrl}/v1/auth/jwt`, {
       method: this.methods.POST,
       headers: this.headers,
