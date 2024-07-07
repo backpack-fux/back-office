@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export function middleware(request: NextRequest) {
   const authToken = request.cookies.get("auth_token");
   const isAuthRoute = request.nextUrl.pathname.startsWith("/auth");
-  const isDashboardRoute = request.nextUrl.pathname.startsWith("/dashboard");
+  const isDashboardRoute = request.nextUrl.pathname.includes("/dashboard");
 
   if (authToken) {
     // User is authenticated
