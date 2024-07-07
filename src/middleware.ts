@@ -1,0 +1,38 @@
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+
+export function middleware(request: NextRequest) {
+  const authToken = request.cookies.get("auth_token");
+  const isAuthRoute = request.nextUrl.pathname.startsWith("/auth");
+  const isDashboardRoute = request.nextUrl.pathname.startsWith("/dashboard");
+
+  if (authToken) {
+    // User is authenticated
+    if (isAuthRoute) {
+      // Redirect authenticated users from auth routes to the dashboard
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+  } else {
+    // User is not authenticated
+    if (!isAuthRoute || isDashboardRoute) {
+      // Redirect unauthenticated users to the auth route
+      return NextResponse.redirect(new URL("/auth", request.url));
+    }
+  }
+
+  // Allow the request to proceed if no redirection is needed
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+  ],
+};
