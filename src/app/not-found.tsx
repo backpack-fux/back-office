@@ -2,12 +2,16 @@
 
 import { Button } from "@nextui-org/button";
 import { useRouter } from "next/navigation";
+import { useNeynarContext } from "@neynar/react";
+import Cookies from "js-cookie";
 
 export default function ForbiddenPage() {
   const router = useRouter();
+  const { logoutUser } = useNeynarContext();
 
   const handleRetrySignIn = () => {
-    // Redirect to the home page or trigger the sign-in modal
+    Cookies.remove("pyv2_auth_token");
+    logoutUser();
     router.push("/");
   };
 
