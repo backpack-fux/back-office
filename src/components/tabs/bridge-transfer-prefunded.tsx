@@ -3,6 +3,7 @@ import { Divider } from "@nextui-org/divider";
 import { Input } from "@nextui-org/input";
 import { Select, SelectItem } from "@nextui-org/select";
 import { Tab, Tabs } from "@nextui-org/tabs";
+
 import {
   prefundedCurrencyOptions,
   prefundedNetworkOptions,
@@ -43,50 +44,50 @@ export default function PrefundedTransferTabs() {
                 {tab.id === "amount" && (
                   <>
                     <Input
-                      type="number"
+                      className="max-w-xs"
                       label="Amount"
                       placeholder="$420.69"
-                      className="max-w-xs"
-                    ></Input>
+                      type="number"
+                    />
                     <Select
+                      className="max-w-xs"
                       items={prefundedNetworkOptions}
                       label="Bridge Account Number"
                       placeholder="Its the bridge account number"
-                      className="max-w-xs"
                     >
                       {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
                     </Select>
                     <Input
+                      className="max-w-xs"
                       id="number"
                       label="Transfer Fee"
                       placeholder="$69.42"
-                      className="max-w-xs"
-                    ></Input>
+                    />
                   </>
                 )}
                 {tab.id === "source" && (
                   <>
                     <Select
+                      className="max-w-xs"
                       items={sourceAccountsTemp}
                       label="Source Account"
                       placeholder="Choose your source account"
-                      className="max-w-xs"
                     >
                       {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
                     </Select>
                     <Select
+                      className="max-w-xs"
                       items={prefundedCurrencyOptions}
                       label="Currency Options"
                       placeholder="Select a currency"
-                      className="max-w-xs"
                     >
                       {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
                     </Select>
                     <Select
+                      className="max-w-xs"
                       items={prefundedNetworkOptions}
                       label="Network Options"
                       placeholder="Select a network as your payment rail"
-                      className="max-w-xs"
                     >
                       {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
                     </Select>
@@ -95,26 +96,26 @@ export default function PrefundedTransferTabs() {
                 {tab.id === "destination" && (
                   <>
                     <Select
+                      className="max-w-xs"
                       items={sourceAccountsTemp}
                       label="Destination Account"
                       placeholder="Choose your destination account"
-                      className="max-w-xs"
                     >
                       {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
                     </Select>
                     <Select
+                      className="max-w-xs"
                       items={prefundedCurrencyOptions}
                       label="Currency Options"
                       placeholder="Select a currency"
-                      className="max-w-xs"
                     >
                       {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
                     </Select>
                     <Select
+                      className="max-w-xs"
                       items={prefundedNetworkOptions}
                       label="Network Options"
                       placeholder="Select a network as your payment rail"
-                      className="max-w-xs"
                     >
                       {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
                     </Select>

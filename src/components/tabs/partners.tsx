@@ -1,10 +1,11 @@
-import PartnerFunctions from "@/components/tabs/partner-functions";
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
 import { Image } from "@nextui-org/image";
 import { Link } from "@nextui-org/link";
 import { Tab, Tabs } from "@nextui-org/tabs";
 import { useState } from "react";
+
+import PartnerFunctions from "@/components/tabs/partner-functions";
 
 export default function PartnerTabs() {
   const tabs = [
@@ -135,11 +136,11 @@ export default function PartnerTabs() {
                         {tab.links.map((link, index) => (
                           <li key={index}>
                             <Link
-                              href={link.url}
                               isExternal
                               showAnchorIcon
-                              underline="hover"
                               color="primary"
+                              href={link.url}
+                              underline="hover"
                             >
                               {link.text}
                             </Link>

@@ -11,10 +11,10 @@ export function NeynarProvider({ children }: { children: React.ReactNode }) {
         defaultTheme: Theme.Dark, // Change to Theme.Light if you prefer
         eventsCallbacks: {
           onAuthSuccess: () => {
-            console.log("Authentication successful");
+            console.log("Neynar Auth successful");
           },
           onSignout: () => {
-            console.log("User signed out");
+            console.log("User signed out from Neynar");
           },
         },
       }}
