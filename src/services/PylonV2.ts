@@ -1,6 +1,6 @@
 import { RequestInit } from "next/dist/server/web/spec-extension/request";
 
-import { GenerateJWTResponse } from "@/types/api";
+import { BridgePrefundedAccountBalanceResponse, GenerateJWTResponse } from "@/types/api";
 
 type RequestOptions = Omit<RequestInit, "body"> & { body?: string | object };
 
@@ -20,6 +20,8 @@ export class PylonV2Service {
   };
 
   private async request<T>(url: string, options: RequestOptions): Promise<T> {
+    console.log("url", url);
+    console.log("options", options);
     const response = await fetch(url, {
       ...options,
       body: typeof options.body === "object" ? JSON.stringify(options.body) : options.body,
@@ -49,6 +51,14 @@ export class PylonV2Service {
       method: this.methods.POST,
       headers: this.headers,
       body: JSON.stringify({ signerUuid, fid }),
+    });
+  }
+
+  public async getPrefundedAccountBalance(): Promise<BridgePrefundedAccountBalanceResponse> {
+    console.log("getPrefundedAccountBalance");
+    return await this.request(`${this.apiBaseUrl}/v1/bridge/prefunded-account-balance`, {
+      method: this.methods.GET,
+      headers: this.headers,
     });
   }
 }

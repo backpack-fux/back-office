@@ -1,9 +1,9 @@
 "use client";
 
+import { useNeynarContext } from "@neynar/react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useNeynarContext } from "@neynar/react";
 
 import { SignInModal } from "@/components/siwn";
 import { PylonV2Service } from "@/services/PylonV2";
