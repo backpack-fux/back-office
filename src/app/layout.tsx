@@ -2,10 +2,9 @@ import "@/styles/globals.css";
 import clsx from "clsx";
 import { Metadata, Viewport } from "next";
 
-import { NextUiProvider } from "@/providers/nextui";
-
 import { fontSans } from "@/config/fonts";
 import { siteConfig } from "@/config/site";
+import { NextUiProvider } from "@/providers/nextui";
 import { NeynarProvider } from "@/providers/neynar";
 
 export const metadata: Metadata = {
@@ -28,7 +27,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html suppressHydrationWarning lang="en">
       <head />
       <body className={clsx("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
         <NextUiProvider themeProps={{ attribute: "class", defaultTheme: "dark" }}>

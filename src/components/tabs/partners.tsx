@@ -98,7 +98,7 @@ export default function PartnerTabs() {
   const [selectedPartner, setSelectedPartner] = useState<string>(tabs[0].id);
 
   return (
-    <div className="flex w-full flex-col md:flex-row gap-4">
+    <div className="flex w-full flex-col gap-4 md:flex-row">
       <div className="w-full md:w-1/2">
         <Tabs
           aria-label="Partner options"
@@ -114,24 +114,24 @@ export default function PartnerTabs() {
                 </CardHeader>
                 <Divider />
                 <CardBody>
-                  <div className="flex flex-col md:flex-row gap-4">
+                  <div className="flex flex-col gap-4 md:flex-row">
                     <div className="w-full md:w-1/3">
                       <Image
                         alt={`${tab.label} background`}
-                        className="object-cover rounded-xl w-full h-full"
+                        className="size-full rounded-xl object-cover"
                         src={tab.image}
                       />
                     </div>
-                    <div className="w-full md:w-2/3 flex flex-col">
+                    <div className="flex w-full flex-col md:w-2/3">
                       <h2 className="text-lg font-semibold">Current Balance</h2>
                       <p>{tab.balance}</p>
-                      <h2 className="text-lg font-semibold mt-4">Functions</h2>
+                      <h2 className="mt-4 text-lg font-semibold">Functions</h2>
                       <ul>
                         {tab.functions.map((func, index) => (
                           <li key={index}>- {func}</li>
                         ))}
                       </ul>
-                      <h2 className="text-lg font-semibold mt-4">Links</h2>
+                      <h2 className="mt-4 text-lg font-semibold">Links</h2>
                       <ul>
                         {tab.links.map((link, index) => (
                           <li key={index}>

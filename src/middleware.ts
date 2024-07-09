@@ -1,4 +1,5 @@
 import type { NextRequest } from "next/server";
+
 import { NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
@@ -25,6 +26,7 @@ export function middleware(request: NextRequest) {
       return NextResponse.rewrite(new URL("/auth", request.url));
     }
   }
+
   // Allow the request to proceed if no redirection is needed
   return NextResponse.next();
 }

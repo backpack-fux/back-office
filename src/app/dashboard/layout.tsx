@@ -1,12 +1,13 @@
 import { Link } from "@nextui-org/link";
+
 import { Navbar } from "@/components/navbar";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative flex flex-col h-screen">
+    <div className="relative flex h-screen flex-col">
       <Navbar />
-      <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">{children}</main>
-      <footer className="w-full flex items-center justify-center py-3">
+      <main className="container mx-auto max-w-7xl grow px-6 pt-16">{children}</main>
+      <footer className="flex w-full items-center justify-center py-3">
         <Link
           isExternal
           className="flex items-center gap-1 text-current"

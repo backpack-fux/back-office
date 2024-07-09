@@ -1,5 +1,8 @@
+import { RequestInit } from "next/dist/server/web/spec-extension/request";
+
 import { GenerateJWTResponse } from "@/types/api";
-import { NextResponse } from "next/server";
+
+type RequestOptions = Omit<RequestInit, "body"> & { body?: string | object };
 
 export class PylonV2Service {
   private apiBaseUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -9,21 +12,26 @@ export class PylonV2Service {
     POST: "POST",
     PUT: "PUT",
     DELETE: "DELETE",
-  };
+  } as const;
 
   private headers = {
     "Content-Type": "application/json",
     Accept: "application/json",
   };
 
-  private async request(url: string, options: RequestInit): Promise<any> {
-    const response = await fetch(url, options);
+  private async request<T>(url: string, options: RequestOptions): Promise<T> {
+    const response = await fetch(url, {
+      ...options,
+      body: typeof options.body === "object" ? JSON.stringify(options.body) : options.body,
+    });
 
     if (!response.ok) {
       const errorInfo = `URL: ${url} - Status: ${response.status} (${response.statusText})`;
+
       console.error(`Request failed: ${errorInfo}`);
 
       const responseBody = await response.text();
+
       console.error(`Response Body: ${responseBody.substring(0, 200)}...`);
 
       throw new Error(
@@ -31,7 +39,9 @@ export class PylonV2Service {
       );
     }
 
-    return (await response.json()).data;
+    const data = await response.json();
+
+    return data.data;
   }
 
   public async generateAccessToken(signerUuid: string, fid: number): Promise<GenerateJWTResponse> {

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import PrefundedTransferTabs from "./bridge-transfer-prefunded";
 
 interface PartnerFunctionsProps {
@@ -6,7 +7,7 @@ interface PartnerFunctionsProps {
 }
 
 export default function PartnerFunctions({ selectedPartner }: PartnerFunctionsProps) {
-  const [functionComponent, setFunctionComponent] = useState<JSX.Element | null>(null);
+  const [functionComponent, setFunctionComponent] = useState<React.ReactElement | null>(null);
 
   useEffect(() => {
     switch (selectedPartner) {
