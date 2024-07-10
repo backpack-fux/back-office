@@ -1,4 +1,4 @@
-export const prefundedCurrencyOptions = [
+export const prefundedCurrencyOptionsTemp = [
   { key: "usd", label: "USD" },
   { key: "eur", label: "EUR" },
   { key: "arb", label: "USDC - Arbitrum" },
@@ -11,7 +11,7 @@ export const prefundedCurrencyOptions = [
   { key: "stl", label: "USDC - Stellar" },
   { key: "trn", label: "USDC - Tron" },
 ];
-export const prefundedNetworkOptions = [
+export const prefundedNetworkOptionsTemp = [
   { key: "ach", label: "ACH" },
   { key: "wire", label: "Wire" },
   { key: "swift", label: "SWIFT" },

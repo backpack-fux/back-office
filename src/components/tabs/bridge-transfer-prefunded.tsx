@@ -5,8 +5,8 @@ import { Select, SelectItem } from "@nextui-org/select";
 import { Tab, Tabs } from "@nextui-org/tabs";
 
 import {
-  prefundedCurrencyOptions,
-  prefundedNetworkOptions,
+  prefundedCurrencyOptionsTemp,
+  prefundedNetworkOptionsTemp,
   sourceAccountsTemp,
 } from "../data/bridge";
 
@@ -51,7 +51,7 @@ export default function PrefundedTransferTabs() {
                     />
                     <Select
                       className="max-w-xs"
-                      items={prefundedNetworkOptions}
+                      items={prefundedNetworkOptionsTemp}
                       label="Bridge Account Number"
                       placeholder="Its the bridge account number"
                     >
@@ -77,7 +77,7 @@ export default function PrefundedTransferTabs() {
                     </Select>
                     <Select
                       className="max-w-xs"
-                      items={prefundedCurrencyOptions}
+                      items={prefundedCurrencyOptionsTemp}
                       label="Currency Options"
                       placeholder="Select a currency"
                     >
@@ -85,7 +85,7 @@ export default function PrefundedTransferTabs() {
                     </Select>
                     <Select
                       className="max-w-xs"
-                      items={prefundedNetworkOptions}
+                      items={prefundedNetworkOptionsTemp}
                       label="Network Options"
                       placeholder="Select a network as your payment rail"
                     >
@@ -105,7 +105,7 @@ export default function PrefundedTransferTabs() {
                     </Select>
                     <Select
                       className="max-w-xs"
-                      items={prefundedCurrencyOptions}
+                      items={prefundedCurrencyOptionsTemp}
                       label="Currency Options"
                       placeholder="Select a currency"
                     >
@@ -113,7 +113,7 @@ export default function PrefundedTransferTabs() {
                     </Select>
                     <Select
                       className="max-w-xs"
-                      items={prefundedNetworkOptions}
+                      items={prefundedNetworkOptionsTemp}
                       label="Network Options"
                       placeholder="Select a network as your payment rail"
                     >
