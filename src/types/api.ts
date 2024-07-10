@@ -3,10 +3,8 @@ export type GenerateJWTResponse = {
 };
 
 export type BridgePrefundedAccountBalanceResponse = {
+  id: string;
   available_balance: string;
-  // statusCode: number;
-  // data: {
-  //   available_balance: string;
-  
-  // };
+  currency: string;
+  name: string;
 };

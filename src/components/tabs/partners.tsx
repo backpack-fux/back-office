@@ -6,15 +6,18 @@ import { Tab, Tabs } from "@nextui-org/tabs";
 import { useState } from "react";
 
 import PartnerFunctions from "@/components/tabs/partner-functions";
-import { BridgeBalance } from "@/services/PrefundedAccountBalance";
+import { useBridgeBalance } from "@/hooks/useBridgeBalance";
+import { formatBalance } from "@/utils/helper";
 
 export default function PartnerTabs() {
+  const { balance, currency, accountName, isLoading } = useBridgeBalance();
+
   const tabs = [
     {
       id: "bridge",
       label: "Bridge",
       content: "Bridge is used for on-ramps and off-ramps of stable coins",
-      balance: <BridgeBalance />,
+      balance: isLoading ? "Loading..." : formatBalance(balance, currency),
       functions: ["Account Balance", "Account Transfers"],
       links: [
         {

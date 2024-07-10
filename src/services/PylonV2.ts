@@ -1,6 +1,7 @@
 import { RequestInit } from "next/dist/server/web/spec-extension/request";
 
 import { BridgePrefundedAccountBalanceResponse, GenerateJWTResponse } from "@/types/api";
+import Cookies from "js-cookie";
 
 type RequestOptions = Omit<RequestInit, "body"> & { body?: string | object };
 
@@ -19,7 +20,7 @@ export class PylonV2Service {
     Accept: "application/json",
   };
 
-  private async request<T>(url: string, options: RequestOptions): Promise<T> {
+  private async request(url: string, options: RequestOptions): Promise<any> {
     console.log("url", url);
     console.log("options", options);
     const response = await fetch(url, {
@@ -41,9 +42,7 @@ export class PylonV2Service {
       );
     }
 
-    const data = await response.json();
-
-    return data.data;
+    return (await response.json()).data;
   }
 
   public async generateAccessToken(signerUuid: string, fid: number): Promise<GenerateJWTResponse> {
@@ -54,11 +53,12 @@ export class PylonV2Service {
     });
   }
 
-  public async getPrefundedAccountBalance(): Promise<BridgePrefundedAccountBalanceResponse> {
-    console.log("getPrefundedAccountBalance");
+  public async getPrefundedAccountBalance(): Promise<BridgePrefundedAccountBalanceResponse[]> {
+    const authToken = Cookies.get("pyv2_auth_token");
     return await this.request(`${this.apiBaseUrl}/v1/bridge/prefunded-account-balance`, {
-      method: this.methods.GET,
+      method: this.methods.POST,
       headers: this.headers,
+      body: { token: authToken },
     });
   }
 }
