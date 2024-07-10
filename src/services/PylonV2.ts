@@ -20,9 +20,7 @@ export class PylonV2Service {
     Accept: "application/json",
   };
 
-  private async request(url: string, options: RequestOptions): Promise<any> {
-    console.log("url", url);
-    console.log("options", options);
+  private async request<T>(url: string, options: RequestOptions): Promise<T> {
     const response = await fetch(url, {
       ...options,
       body: typeof options.body === "object" ? JSON.stringify(options.body) : options.body,
