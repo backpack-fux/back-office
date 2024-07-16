@@ -31,3 +31,17 @@ export const sourceAccountsTemp = [
   { key: "bp-chase", label: "Backpack Chase" },
   { key: "0x6b...1234", label: "USDC - EVM" },
 ];
+
+
+export const oboCustomers = [
+  { 
+    key: "backpack-dao-llc", 
+    label: "Backpack DAO LLC",
+    value: process.env.NEXT_PUBLIC_BACKPACK_DAO_LLC_ID || "default_backpack_id"
+  },
+  { 
+    key: "coinfella", 
+    label: "Coinfella (Bucket Labs Ltd)",
+    value: process.env.NEXT_PUBLIC_COINFELLA_ID || "default_coinfella_id"
+  },
+];
