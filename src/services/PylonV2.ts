@@ -15,9 +15,11 @@ export class PylonV2Service {
     DELETE: "DELETE",
   } as const;
 
-  private headers = {
-    "Content-Type": "application/json",
-    Accept: "application/json",
+  private headers = (isBody: boolean) => {
+    return {
+      Accept: "application/json",
+      ...(isBody ? { "Content-Type": "application/json" } : {}),
+    };
   };
 
   private async request<T>(url: string, options: RequestOptions): Promise<T> {
@@ -46,17 +48,17 @@ export class PylonV2Service {
   public async generateAccessToken(signerUuid: string, fid: number): Promise<GenerateJWTResponse> {
     return await this.request(`${this.apiBaseUrl}/v1/auth/jwt`, {
       method: this.methods.POST,
-      headers: this.headers,
+      headers: this.headers(true),
       body: JSON.stringify({ signerUuid, fid }),
+      credentials: "include",
     });
   }
 
   public async getPrefundedAccount(): Promise<BridgePrefundedAccountResponse[]> {
-    const authToken = Cookies.get("pyv2_auth_token");
     return await this.request(`${this.apiBaseUrl}/v1/bridge/prefunded-account-balance`, {
       method: this.methods.POST,
-      headers: this.headers,
-      body: { token: authToken },
+      headers: this.headers(false),
+      credentials: "include",
     });
   }
 }

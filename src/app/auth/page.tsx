@@ -26,11 +26,7 @@ export default function SignInPage() {
       try {
         const response = await pylonService.generateAccessToken(signer_uuid, fid);
 
-        if (response.message) {
-          Cookies.set("pyv2_auth_token", response.message, {
-            expires: 1,
-            secure: true,
-          });
+        if (response.message === "success") {
           window.location.reload();
         } else {
           console.error("Failed to generate token:", response);
