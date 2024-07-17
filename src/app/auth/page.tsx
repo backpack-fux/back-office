@@ -27,7 +27,7 @@ export default function SignInPage() {
         const response = await pylonService.generateAccessToken(signer_uuid, fid);
 
         if (response.message === "success") {
-          // window.location.reload();
+          window.location.reload();
         } else {
           console.error("Failed to generate token:", response);
         }
