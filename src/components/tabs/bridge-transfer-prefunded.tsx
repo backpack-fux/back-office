@@ -1,4 +1,4 @@
-import { KeyboardEvent, useState } from "react";
+import { KeyboardEvent, useCallback, useState } from "react";
 
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
@@ -29,6 +29,7 @@ export default function PrefundedTransferTabs() {
   const [amount, setAmount] = useState("");
   const [amountError, setAmountError] = useState("");
   const [transferFee, setTransferFee] = useState("");
+  const [transferFeeError, setTransferFeeError] = useState("");
   const [selectedTab, setSelectedTab] = useState("account");
   const [selectedCurrency, setSelectedCurrency] = useState<BridgeCurrencyEnum | "">("");
 
@@ -58,21 +59,46 @@ export default function PrefundedTransferTabs() {
     },
   ];
 
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setAmount(value);
+  const handleAmountChange = useCallback((value: string) => {
+    const numericValue = value.replace(/[^0-9.]/g, "");
+    const parts = numericValue.split(".");
+    const formattedValue = parts[0] + (parts.length > 1 ? "." + parts[1].slice(0, 2) : "");
 
-    if (value === "") {
+    setAmount(formattedValue);
+
+    if (formattedValue === "") {
       setAmountError("");
     } else {
-      const numValue = parseFloat(value);
+      const numValue = parseFloat(formattedValue);
       if (isNaN(numValue) || numValue < 20) {
-        setAmountError("Amount must be at least $20 douche");
+        setAmountError("Amount must be at least $20");
       } else {
         setAmountError("");
       }
     }
-  };
+  }, []);
+
+  const handleTransferFeeChange = useCallback((value: string) => {
+    // Remove non-numeric characters except for the decimal point
+    const numericValue = value.replace(/[^0-9.]/g, "");
+
+    // Ensure only one decimal point
+    const parts = numericValue.split(".");
+    const formattedValue = parts[0] + (parts.length > 1 ? "." + parts[1].slice(0, 2) : "");
+
+    setTransferFee(formattedValue);
+
+    if (formattedValue === "") {
+      setTransferFeeError("");
+    } else {
+      const numValue = parseFloat(formattedValue);
+      if (isNaN(numValue) || numValue < 0) {
+        setTransferFeeError("Transfer fee must be a non-negative number");
+      } else {
+        setTransferFeeError("");
+      }
+    }
+  }, []);
 
   const handleOboCustomerChange = (value: string) => {
     if (value === "custom") {
@@ -127,10 +153,15 @@ export default function PrefundedTransferTabs() {
                     <Input
                       className="max-w-xs"
                       label="Amount"
-                      placeholder="$20.00"
-                      type="number"
+                      placeholder="20.00"
+                      type="text"
                       value={amount}
-                      onChange={handleAmountChange}
+                      onValueChange={handleAmountChange}
+                      startContent={
+                        <div className="pointer-events-none flex items-center">
+                          <span className="text-default-400 text-small">$</span>
+                        </div>
+                      }
                       isInvalid={!!amountError}
                       errorMessage={amountError}
                     />
@@ -138,8 +169,8 @@ export default function PrefundedTransferTabs() {
                     <Select
                       className="max-w-xs"
                       items={[...oboCustomers, { key: "custom", label: "Custom", value: "custom" }]}
-                      label="Bridge Account Number"
-                      placeholder="Select a bridge account number"
+                      label="Bridge Customer ID"
+                      placeholder="Customer IDs in bridge dashboard"
                       onChange={(e) => handleOboCustomerChange(e.target.value)}
                     >
                       {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
@@ -159,8 +190,6 @@ export default function PrefundedTransferTabs() {
                       />
                     )}
                     <div className="h-1" />
-
-                    {/* Uncomment this to give user visual confirmation of the selected OBO customer */}
                     {selectedOboCustomer && (
                       <Snippet
                         symbol="ID:"
@@ -174,11 +203,18 @@ export default function PrefundedTransferTabs() {
                     <div className="h-4" />
                     <Input
                       className="max-w-xs"
-                      id="number"
                       label="Transfer Fee"
-                      placeholder="$69.42"
+                      placeholder="0.00"
+                      type="text"
                       value={transferFee}
-                      onChange={(e) => setTransferFee(e.target.value)}
+                      onValueChange={handleTransferFeeChange}
+                      startContent={
+                        <div className="pointer-events-none flex items-center">
+                          <span className="text-default-400 text-small">$</span>
+                        </div>
+                      }
+                      isInvalid={!!transferFeeError}
+                      errorMessage={transferFeeError}
                     />
                     <div className="h-4" />
                     <Button
