@@ -45,35 +45,6 @@ export default function PartnerTabs() {
       image: "/worldpay-logo.png",
     },
     {
-      id: "rain",
-      label: "Rain",
-      content:
-        "Rain Cards provides card issuance for business credit cards that spend like prepaid cards",
-      balance: "$987,654.32",
-      functions: ["Issue Cards", "Manage Limits"],
-      links: [
-        {
-          text: "Rain support via Slack",
-          url: "https://app.slack.com/client/T0207CDB4LB/C06H7P4RYN4?selected_team_id=T05E1T4PBFW",
-        },
-        { text: "Rain Default Login", url: "https://use.raincards.xyz" },
-        { text: "Rain Docs", url: "https://docs.raincards.xyz" },
-      ],
-      image: "https://example.com/rain-image.jpg",
-    },
-    {
-      id: "chase",
-      label: "Chase",
-      content: "Chase provides various banking and payment services",
-      balance: "$5,678,901.23",
-      functions: ["Wire Transfers", "ACH Payments"],
-      links: [
-        { text: "Chase Business Support", url: "https://www.chase.com/business/customer-service" },
-        { text: "Online Banking", url: "https://secure.chase.com/web/auth/dashboard" },
-      ],
-      image: "https://example.com/chase-image.jpg",
-    },
-    {
       id: "1konto",
       label: "1Konto",
       content: "1Konto offers on-ramps and off-ramps of crypto assets",
