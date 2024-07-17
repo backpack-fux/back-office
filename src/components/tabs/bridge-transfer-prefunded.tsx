@@ -13,11 +13,12 @@ import {
   BridgeCurrencyEnum,
   DestinationAccount,
   SupportedBlockchain,
-  isValidEVMAddress,
   oboCustomers,
   prefundedCurrencyOptions,
   prefundedNetworkOptions,
 } from "@/components/data/bridge";
+import { isValidEVMAddress } from "@/components/utils/bridge";
+
 import { Button } from "@nextui-org/button";
 
 export default function PrefundedTransferTabs() {
@@ -26,6 +27,7 @@ export default function PrefundedTransferTabs() {
   const [selectedOboCustomer, setSelectedOboCustomer] = useState("");
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [amount, setAmount] = useState("");
+  const [amountError, setAmountError] = useState("");
   const [transferFee, setTransferFee] = useState("");
   const [selectedTab, setSelectedTab] = useState("account");
   const [selectedCurrency, setSelectedCurrency] = useState<BridgeCurrencyEnum | "">("");
@@ -55,6 +57,22 @@ export default function PrefundedTransferTabs() {
       content: "Configure the destination of your transfer",
     },
   ];
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setAmount(value);
+
+    if (value === "") {
+      setAmountError("");
+    } else {
+      const numValue = parseFloat(value);
+      if (isNaN(numValue) || numValue < 20) {
+        setAmountError("Amount must be at least $20 douche");
+      } else {
+        setAmountError("");
+      }
+    }
+  };
 
   const handleOboCustomerChange = (value: string) => {
     if (value === "custom") {
@@ -109,10 +127,12 @@ export default function PrefundedTransferTabs() {
                     <Input
                       className="max-w-xs"
                       label="Amount"
-                      placeholder="$420.69"
+                      placeholder="$20.00"
                       type="number"
                       value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
+                      onChange={handleAmountChange}
+                      isInvalid={!!amountError}
+                      errorMessage={amountError}
                     />
                     <div className="h-4" />
                     <Select
