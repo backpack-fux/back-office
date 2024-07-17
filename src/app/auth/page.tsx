@@ -15,20 +15,13 @@ export default function SignInPage() {
   const { user, isAuthenticated } = useNeynarContext();
   const router = useRouter();
 
-  /**
-   * 1. Get user to sign in
-   * 2. Check if user is allowed to generate JWT
-   * 3. If allowed, generate JWT
-   * 4. If not allowed, show error message
-   */
   useEffect(() => {
     const generateToken = async (signer_uuid: string, fid: number) => {
       try {
         const response = await pylonService.generateAccessToken(signer_uuid, fid);
 
         if (response.message === "success") {
-          // window.location.reload();
-          window.location.href = "/";
+          window.location.reload();
         } else {
           console.error("Failed to generate token:", response);
         }

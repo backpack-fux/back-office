@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const authToken = request.cookies.get("pyv2_auth_token")?.value;
+  const authToken = request.cookies.get("pyv2_auth_token");
   const isAuthRoute = request.nextUrl.pathname.startsWith("/auth");
   const isDashboardRoute = request.nextUrl.pathname.startsWith("/dashboard");
   const isHomePage = request.nextUrl.pathname === "/";
@@ -13,7 +13,7 @@ export function middleware(request: NextRequest) {
     // User is authenticated
     if (isAuthRoute) {
       // Redirect authenticated users from auth routes to the dashboard
-      return NextResponse.rewrite(new URL("/dashboard", request.url));
+      return NextResponse.redirect(new URL("/", request.url));
     }
     if (isHomePage) {
       // Rewrite authenticated users from home page to the dashboard
