@@ -14,7 +14,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           href="https://backpack.network"
           title="backpack homepage"
         >
-          <span className="text-default-600">Blood spilled by</span>
+          <span className="text-default-600">Blood spilt by</span>
           <p className="text-primary">Backpack</p>
         </Link>
       </footer>

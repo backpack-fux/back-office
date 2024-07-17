@@ -1,26 +1,53 @@
+import { KeyboardEvent, useState } from "react";
+
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
 import { Input } from "@nextui-org/input";
 import { Select, SelectItem } from "@nextui-org/select";
+import { Snippet } from "@nextui-org/snippet";
 import { Tab, Tabs } from "@nextui-org/tabs";
 
+import { useBridgeAccount } from "@/hooks/useBridgeBalance";
+
 import {
-  prefundedCurrencyOptionsTemp,
-  prefundedNetworkOptionsTemp,
-  sourceAccountsTemp,
-} from "../data/bridge";
+  BridgeCurrencyEnum,
+  DestinationAccount,
+  SupportedBlockchain,
+  isValidEVMAddress,
+  oboCustomers,
+  prefundedCurrencyOptions,
+  prefundedNetworkOptions,
+} from "@/components/data/bridge";
+import { Button } from "@nextui-org/button";
 
 export default function PrefundedTransferTabs() {
+  const { isLoading, accountName, accountId } = useBridgeAccount();
+  const [customOboCustomer, setCustomOboCustomer] = useState("");
+  const [selectedOboCustomer, setSelectedOboCustomer] = useState("");
+  const [showCustomInput, setShowCustomInput] = useState(false);
+  const [amount, setAmount] = useState("");
+  const [transferFee, setTransferFee] = useState("");
+  const [selectedTab, setSelectedTab] = useState("account");
+  const [selectedCurrency, setSelectedCurrency] = useState<BridgeCurrencyEnum | "">("");
+
+  const [destinationAccount, setDestinationAccount] = useState<DestinationAccount>({
+    address: "",
+    network: "" as SupportedBlockchain,
+  });
+
   const tabs = [
     {
-      id: "amount",
-      label: "Amount",
-      content: "Configure amount and account reference for the transfer",
-    },
-    {
-      id: "source",
-      label: "Source",
-      content: "Configure the source of your transfer",
+      id: "account",
+      label: isLoading
+        ? "Account"
+        : `PFA ${accountName.charAt(0).toUpperCase()}${accountName.slice(1)}`,
+      content: isLoading ? (
+        "Configure amount and account reference for the transfer"
+      ) : (
+        <Snippet symbol="ID:" variant="bordered" color="default" codeString={accountId}>
+          {accountId}
+        </Snippet>
+      ),
     },
     {
       id: "destination",
@@ -29,9 +56,44 @@ export default function PrefundedTransferTabs() {
     },
   ];
 
+  const handleOboCustomerChange = (value: string) => {
+    if (value === "custom") {
+      setShowCustomInput(true);
+      setSelectedOboCustomer("");
+    } else {
+      setShowCustomInput(false);
+      const selectedCustomer = oboCustomers.find((customer) => customer.key === value);
+      setSelectedOboCustomer(selectedCustomer ? selectedCustomer.value : value);
+    }
+  };
+
+  const handleCustomOboCustomerSubmit = () => {
+    if (customOboCustomer.trim()) {
+      setSelectedOboCustomer(customOboCustomer);
+      setShowCustomInput(false);
+      setCustomOboCustomer("");
+    }
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleCustomOboCustomerSubmit();
+    }
+  };
+
+  const handleSetValues = () => {
+    if (amount && selectedOboCustomer && transferFee) {
+      setSelectedTab("destination");
+    }
+  };
+
   return (
     <div className="flex w-full flex-col">
-      <Tabs aria-label="Transfer options">
+      <Tabs
+        aria-label="Transfer options"
+        selectedKey={selectedTab}
+        onSelectionChange={(key) => setSelectedTab(key as string)}
+      >
         {tabs.map((tab) => (
           <Tab key={tab.id} title={tab.label}>
             <Card>
@@ -40,82 +102,116 @@ export default function PrefundedTransferTabs() {
                 <p className="text-small text-default-500">{tab.content}</p>
               </CardHeader>
               <Divider />
+              <h3 className="text-md font-semibold ms-4 mt-2">Transfer Details</h3>
               <CardBody>
-                {tab.id === "amount" && (
+                {tab.id === "account" && (
                   <>
                     <Input
                       className="max-w-xs"
                       label="Amount"
                       placeholder="$420.69"
                       type="number"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
                     />
+                    <div className="h-4" />
                     <Select
                       className="max-w-xs"
-                      items={prefundedNetworkOptionsTemp}
+                      items={[...oboCustomers, { key: "custom", label: "Custom", value: "custom" }]}
                       label="Bridge Account Number"
-                      placeholder="Its the bridge account number"
+                      placeholder="Select a bridge account number"
+                      onChange={(e) => handleOboCustomerChange(e.target.value)}
                     >
                       {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
                     </Select>
+                    {showCustomInput && (
+                      <Input
+                        className="max-w-xs"
+                        label={
+                          <div>
+                            Customer ID <span className="text-red-500">KYC is a prerequisite</span>
+                          </div>
+                        }
+                        placeholder="Enter custom account and press Enter"
+                        value={customOboCustomer}
+                        onChange={(e) => setCustomOboCustomer(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                      />
+                    )}
+                    <div className="h-1" />
+
+                    {/* Uncomment this to give user visual confirmation of the selected OBO customer */}
+                    {selectedOboCustomer && (
+                      <Snippet
+                        symbol="ID:"
+                        variant="bordered"
+                        color="default"
+                        codeString={selectedOboCustomer}
+                      >
+                        {selectedOboCustomer}
+                      </Snippet>
+                    )}
+                    <div className="h-4" />
                     <Input
                       className="max-w-xs"
                       id="number"
                       label="Transfer Fee"
                       placeholder="$69.42"
+                      value={transferFee}
+                      onChange={(e) => setTransferFee(e.target.value)}
                     />
-                  </>
-                )}
-                {tab.id === "source" && (
-                  <>
-                    <Select
-                      className="max-w-xs"
-                      items={sourceAccountsTemp}
-                      label="Source Account"
-                      placeholder="Choose your source account"
+                    <div className="h-4" />
+                    <Button
+                      color="primary"
+                      onClick={handleSetValues}
+                      disabled={!amount || !selectedOboCustomer || !transferFee}
                     >
-                      {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
-                    </Select>
-                    <Select
-                      className="max-w-xs"
-                      items={prefundedCurrencyOptionsTemp}
-                      label="Currency Options"
-                      placeholder="Select a currency"
-                    >
-                      {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
-                    </Select>
-                    <Select
-                      className="max-w-xs"
-                      items={prefundedNetworkOptionsTemp}
-                      label="Network Options"
-                      placeholder="Select a network as your payment rail"
-                    >
-                      {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
-                    </Select>
+                      Set Values and Continue
+                    </Button>
                   </>
                 )}
                 {tab.id === "destination" && (
                   <>
+                    <Input
+                      className="max-w-xs"
+                      label="Destination Address"
+                      placeholder="0x..."
+                      value={destinationAccount.address}
+                      onChange={(e) =>
+                        setDestinationAccount((prev) => ({ ...prev, address: e.target.value }))
+                      }
+                      isInvalid={
+                        destinationAccount.address !== "" &&
+                        !isValidEVMAddress(destinationAccount.address)
+                      }
+                      errorMessage={
+                        destinationAccount.address && !isValidEVMAddress(destinationAccount.address)
+                          ? "Invalid EVM address"
+                          : ""
+                      }
+                    />
+                    <div className="h-4" />
                     <Select
                       className="max-w-xs"
-                      items={sourceAccountsTemp}
-                      label="Destination Account"
-                      placeholder="Choose your destination account"
-                    >
-                      {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
-                    </Select>
-                    <Select
-                      className="max-w-xs"
-                      items={prefundedCurrencyOptionsTemp}
-                      label="Currency Options"
-                      placeholder="Select a currency"
-                    >
-                      {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
-                    </Select>
-                    <Select
-                      className="max-w-xs"
-                      items={prefundedNetworkOptionsTemp}
+                      items={prefundedNetworkOptions}
                       label="Network Options"
                       placeholder="Select a network as your payment rail"
+                      onChange={(e) =>
+                        setDestinationAccount((prev) => ({
+                          ...prev,
+                          network: e.target.value as SupportedBlockchain,
+                        }))
+                      }
+                    >
+                      {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
+                    </Select>
+                    <div className="h-4" />
+                    <Select
+                      className="max-w-xs"
+                      items={prefundedCurrencyOptions}
+                      label="Currency Options"
+                      placeholder="Select a currency"
+                      onChange={(e) => setSelectedCurrency(e.target.value as BridgeCurrencyEnum)}
                     >
                       {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
                     </Select>

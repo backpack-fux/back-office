@@ -1,6 +1,6 @@
 import { RequestInit } from "next/dist/server/web/spec-extension/request";
 
-import { BridgePrefundedAccountBalanceResponse, GenerateJWTResponse } from "@/types/api";
+import { BridgePrefundedAccountResponse, GenerateJWTResponse } from "@/types/api";
 import Cookies from "js-cookie";
 
 type RequestOptions = Omit<RequestInit, "body"> & { body?: string | object };
@@ -51,7 +51,7 @@ export class PylonV2Service {
     });
   }
 
-  public async getPrefundedAccountBalance(): Promise<BridgePrefundedAccountBalanceResponse[]> {
+  public async getPrefundedAccount(): Promise<BridgePrefundedAccountResponse[]> {
     const authToken = Cookies.get("pyv2_auth_token");
     return await this.request(`${this.apiBaseUrl}/v1/bridge/prefunded-account-balance`, {
       method: this.methods.POST,
