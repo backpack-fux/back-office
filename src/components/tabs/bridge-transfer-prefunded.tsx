@@ -213,7 +213,7 @@ export default function PrefundedTransferTabs() {
   };
 
   return (
-    <div className="flex w-full flex-col">
+    <>
       <Tabs
         aria-label="Transfer options"
         selectedKey={selectedTab}
@@ -372,39 +372,60 @@ export default function PrefundedTransferTabs() {
           </Tab>
         ))}
       </Tabs>
-      <Modal isOpen={isConfirmModalOpen} onClose={() => setIsConfirmModalOpen(false)}>
+      <Modal
+        isOpen={isConfirmModalOpen}
+        onClose={() => setIsConfirmModalOpen(false)}
+        size="3xl"
+        scrollBehavior="inside"
+      >
         <ModalContent>
           <ModalHeader className="flex flex-col gap-1">Confirm Transfer</ModalHeader>
           <ModalBody>
-            <div className="space-y-2">
-              <p>
-                <strong>From:</strong> {accountName}
-              </p>
-              <p>
-                <strong>Amount:</strong> ${combinedData.amount}
-              </p>
-              <p>
-                <strong>Transfer Fee:</strong> ${combinedData.transferFee}
-              </p>
-              <p>
-                <strong>OBO Customer:</strong> {combinedData.oboCustomer}
-              </p>
-              <p>
-                <strong>To:</strong> {combinedData.destinationAddress}
-              </p>
-              <p>
-                <strong>Network:</strong> {combinedData.network}
-              </p>
-              <p>
-                <strong>Currency:</strong> {combinedData.currency}
-              </p>
-              <p>
-                <strong>Total:</strong> $
-                {(parseFloat(combinedData.amount) + parseFloat(combinedData.transferFee)).toFixed(
-                  2
-                )}
-              </p>
-            </div>
+            <Snippet
+              symbol="Receipt"
+              variant="bordered"
+              color="default"
+              codeString={`
+From: ${accountName}
+Amount: $${combinedData.amount}
+Transfer Fee: $${combinedData.transferFee}
+OBO Customer: ${combinedData.oboCustomer}
+To: ${combinedData.destinationAddress}
+Network: ${combinedData.network}
+Currency: ${combinedData.currency}
+Total: $${(parseFloat(combinedData.amount) + parseFloat(combinedData.transferFee)).toFixed(2)}
+        `}
+            >
+              <div className="space-y-2">
+                <p>
+                  <strong>From:</strong> {accountName}
+                </p>
+                <p>
+                  <strong>Amount:</strong> ${combinedData.amount}
+                </p>
+                <p>
+                  <strong>Transfer Fee:</strong> ${combinedData.transferFee}
+                </p>
+                <p>
+                  <strong>OBO Customer:</strong> {combinedData.oboCustomer}
+                </p>
+                <p>
+                  <strong>To:</strong> {combinedData.destinationAddress}
+                </p>
+                <p>
+                  <strong>Network:</strong> {combinedData.network}
+                </p>
+                <p>
+                  <strong>Currency:</strong> {combinedData.currency}
+                </p>
+                <p>
+                  <strong>Total:</strong> $
+                  {(parseFloat(combinedData.amount) + parseFloat(combinedData.transferFee)).toFixed(
+                    2
+                  )}
+                </p>
+              </div>
+            </Snippet>
           </ModalBody>
           <ModalFooter>
             <Button color="danger" variant="light" onPress={() => setIsConfirmModalOpen(false)}>
@@ -416,6 +437,6 @@ export default function PrefundedTransferTabs() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </div>
+    </>
   );
 }

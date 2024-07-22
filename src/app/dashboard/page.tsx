@@ -32,10 +32,11 @@ export default function Dashboard() {
       <SignInModal isOpen={isSignInModalOpen} onClose={handleCloseSignInModal} />
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
         <div className="inline-block max-w-lg justify-center text-center">
-          <h1 className={title()}>Battle&nbsp;</h1>
-          <h1 className={title({ color: "violet" })}>Stations&nbsp;</h1>
+          <h1 className={title({ color: "charyo" })}>Battle Stations&nbsp;</h1>
           <br />
-          <h2 className={subtitle({ class: "mt-4" })}>Heads down, keep building</h2>
+          <h2 className={subtitle({ class: "mt-4", color: "charyo" })}>
+            Heads down, keep building
+          </h2>
         </div>
         <div className="mt-8 flex w-full max-w-7xl gap-4">
           <PartnerTabs />
