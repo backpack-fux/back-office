@@ -70,13 +70,13 @@ export const Navbar = () => {
 
       <NavbarContent className="hidden basis-1/5 sm:flex sm:basis-full" justify="end">
         <NavbarItem className="hidden gap-2 sm:flex">
-          <Link isExternal aria-label="Twitter" href={siteConfig.links.twitter}>
+          <Link isExternal aria-label="Twitter" href={siteConfig.links.twitter.href}>
             <TwitterIcon className="text-default-500" />
           </Link>
           <Link isExternal aria-label="Discord" href={siteConfig.links.discord}>
             <DiscordIcon className="text-default-500" />
           </Link>
-          <Link isExternal aria-label="Github" href={siteConfig.links.github}>
+          <Link isExternal aria-label="Github" href={siteConfig.links.github.href}>
             <GithubIcon className="text-default-500" />
           </Link>
           <ThemeSwitch />
@@ -88,7 +88,7 @@ export const Navbar = () => {
       </NavbarContent>
 
       <NavbarContent className="basis-1 pl-4 sm:hidden" justify="end">
-        <Link isExternal aria-label="Github" href={siteConfig.links.github}>
+        <Link isExternal aria-label="Github" href={siteConfig.links.github.href}>
           <GithubIcon className="text-default-500" />
         </Link>
         <ThemeSwitch />

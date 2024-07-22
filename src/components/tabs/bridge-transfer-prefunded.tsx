@@ -17,9 +17,10 @@ import {
   prefundedCurrencyOptions,
   prefundedNetworkOptions,
 } from "@/components/data/bridge";
-import { isValidEVMAddress } from "@/components/utils/bridge";
+import { getValidNetworksForAddress, isValidEVMAddress } from "@/components/utils/bridge";
 
 import { Button } from "@nextui-org/button";
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/modal";
 
 export default function PrefundedTransferTabs() {
   const { isLoading, accountName, accountId } = useBridgeAccount();
@@ -32,11 +33,34 @@ export default function PrefundedTransferTabs() {
   const [transferFeeError, setTransferFeeError] = useState("");
   const [selectedTab, setSelectedTab] = useState("account");
   const [selectedCurrency, setSelectedCurrency] = useState<BridgeCurrencyEnum | "">("");
+  const [validNetworks, setValidNetworks] = useState<SupportedBlockchain[]>([]);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [destinationAccount, setDestinationAccount] = useState<DestinationAccount>({
     address: "",
     network: "" as SupportedBlockchain,
   });
+
+  const [combinedData, setCombinedData] = useState({
+    amount: "",
+    oboCustomer: "",
+    transferFee: "",
+    destinationAddress: "",
+    network: "",
+    currency: "",
+  });
+
+  const updateValidNetworks = useCallback((address: string) => {
+    const networks = getValidNetworksForAddress(address);
+    setValidNetworks(networks);
+  }, []);
+
+  const handleDestinationAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newAddress = e.target.value;
+    setDestinationAccount((prev) => ({ ...prev, address: newAddress }));
+    updateValidNetworks(newAddress);
+  };
 
   const tabs = [
     {
@@ -127,7 +151,42 @@ export default function PrefundedTransferTabs() {
 
   const handleSetValues = () => {
     if (amount && selectedOboCustomer && transferFee) {
+      setCombinedData((prev) => ({
+        ...prev,
+        amount,
+        oboCustomer: selectedOboCustomer,
+        transferFee,
+      }));
       setSelectedTab("destination");
+    }
+  };
+
+  const handleSubmit = () => {
+    if (destinationAccount.address && destinationAccount.network && selectedCurrency) {
+      setCombinedData((prev) => ({
+        ...prev,
+        destinationAddress: destinationAccount.address,
+        network: destinationAccount.network,
+        currency: selectedCurrency,
+      }));
+      setIsConfirmModalOpen(true);
+    }
+  };
+
+  const handleConfirmTransfer = async () => {
+    setIsSubmitting(true);
+    try {
+      // Here you would send the data to your API
+      console.log("Submitting data:", combinedData);
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Close modal and reset form
+      setIsConfirmModalOpen(false);
+      // Reset form fields here
+    } catch (error) {
+      console.error("Error submitting transfer:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -231,27 +290,28 @@ export default function PrefundedTransferTabs() {
                     <Input
                       className="max-w-xs"
                       label="Destination Address"
-                      placeholder="0x..."
+                      placeholder="0xdeadbeef"
                       value={destinationAccount.address}
-                      onChange={(e) =>
-                        setDestinationAccount((prev) => ({ ...prev, address: e.target.value }))
-                      }
+                      onChange={handleDestinationAddressChange}
                       isInvalid={
                         destinationAccount.address !== "" &&
                         !isValidEVMAddress(destinationAccount.address)
                       }
                       errorMessage={
                         destinationAccount.address && !isValidEVMAddress(destinationAccount.address)
-                          ? "Invalid EVM address"
+                          ? "Invalid address"
                           : ""
                       }
                     />
                     <div className="h-4" />
                     <Select
                       className="max-w-xs"
-                      items={prefundedNetworkOptions}
+                      items={prefundedNetworkOptions.filter((option) =>
+                        validNetworks.includes(option.key as SupportedBlockchain)
+                      )}
                       label="Network Options"
                       placeholder="Select a network as your payment rail"
+                      // isDisabled={validNetworks.length === 0}
                       onChange={(e) =>
                         setDestinationAccount((prev) => ({
                           ...prev,
@@ -271,6 +331,18 @@ export default function PrefundedTransferTabs() {
                     >
                       {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
                     </Select>
+                    <div className="h-4" />
+                    <Button
+                      color="primary"
+                      onClick={handleSubmit}
+                      disabled={
+                        !destinationAccount.address ||
+                        !destinationAccount.network ||
+                        !selectedCurrency
+                      }
+                    >
+                      Submit Transfer
+                    </Button>
                   </>
                 )}
               </CardBody>
@@ -278,6 +350,50 @@ export default function PrefundedTransferTabs() {
           </Tab>
         ))}
       </Tabs>
+      <Modal isOpen={isConfirmModalOpen} onClose={() => setIsConfirmModalOpen(false)}>
+        <ModalContent>
+          <ModalHeader className="flex flex-col gap-1">Confirm Transfer</ModalHeader>
+          <ModalBody>
+            <div className="space-y-2">
+              <p>
+                <strong>From:</strong> {accountName}
+              </p>
+              <p>
+                <strong>Amount:</strong> ${combinedData.amount}
+              </p>
+              <p>
+                <strong>Transfer Fee:</strong> ${combinedData.transferFee}
+              </p>
+              <p>
+                <strong>OBO Customer:</strong> {combinedData.oboCustomer}
+              </p>
+              <p>
+                <strong>To:</strong> {combinedData.destinationAddress}
+              </p>
+              <p>
+                <strong>Network:</strong> {combinedData.network}
+              </p>
+              <p>
+                <strong>Currency:</strong> {combinedData.currency}
+              </p>
+              <p>
+                <strong>Total:</strong> $
+                {(parseFloat(combinedData.amount) + parseFloat(combinedData.transferFee)).toFixed(
+                  2
+                )}
+              </p>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="danger" variant="light" onPress={() => setIsConfirmModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button color="primary" onPress={handleConfirmTransfer} isLoading={isSubmitting}>
+              Confirm Transfer
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   );
 }
