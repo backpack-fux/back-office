@@ -1,6 +1,9 @@
 import { ethers } from "ethers";
-import { BridgePaymentRailEnum, SupportedBlockchain } from "../data/bridge";
+import { BridgePaymentRailEnum, SupportedBlockchain } from "../types/bridge";
 
+export function generateIdempotencyKey(): string {
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+}
 
 export function isValidEVMAddress(address: string): boolean {
   return ethers.isAddress(address);

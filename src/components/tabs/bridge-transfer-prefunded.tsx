@@ -1,8 +1,10 @@
 import { KeyboardEvent, useCallback, useState } from "react";
 
+import { Button } from "@nextui-org/button";
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
 import { Input } from "@nextui-org/input";
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/modal";
 import { Select, SelectItem } from "@nextui-org/select";
 import { Snippet } from "@nextui-org/snippet";
 import { Tab, Tabs } from "@nextui-org/tabs";
@@ -11,16 +13,18 @@ import { useBridgeAccount } from "@/hooks/useBridgeBalance";
 
 import {
   BridgeCurrencyEnum,
+  BridgePaymentRailEnum,
   DestinationAccount,
   SupportedBlockchain,
   oboCustomers,
   prefundedCurrencyOptions,
   prefundedNetworkOptions,
-} from "@/components/data/bridge";
-import { getValidNetworksForAddress, isValidEVMAddress } from "@/components/utils/bridge";
+} from "@/types/bridge";
+import { getValidNetworksForAddress, isValidEVMAddress } from "@/utils/bridge";
 
-import { Button } from "@nextui-org/button";
-import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/modal";
+import { PylonV2Service } from "@/services/PylonV2";
+
+const pylonService = new PylonV2Service();
 
 export default function PrefundedTransferTabs() {
   const { isLoading, accountName, accountId } = useBridgeAccount();
@@ -176,15 +180,33 @@ export default function PrefundedTransferTabs() {
   const handleConfirmTransfer = async () => {
     setIsSubmitting(true);
     try {
-      // Here you would send the data to your API
-      console.log("Submitting data:", combinedData);
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const transferData = {
+        amount: parseFloat(combinedData.amount),
+        on_behalf_of: combinedData.oboCustomer,
+        developer_fee: combinedData.transferFee ? parseFloat(combinedData.transferFee) : undefined,
+        source: {
+          payment_rail: BridgePaymentRailEnum.PREFUNDED,
+          currency: combinedData.currency as BridgeCurrencyEnum.USD,
+          prefunded_account_id: accountId,
+        },
+        destination: {
+          payment_rail: combinedData.network as SupportedBlockchain,
+          currency: combinedData.currency as BridgeCurrencyEnum,
+          to_address: combinedData.destinationAddress,
+        },
+      };
+
+      const response = await pylonService.createPrefundedAccountTransfer(transferData);
+
+      console.log("Transfer submitted successfully:", response);
+
       // Close modal and reset form
       setIsConfirmModalOpen(false);
       // Reset form fields here
+      // You might want to show a success message to the user
     } catch (error) {
       console.error("Error submitting transfer:", error);
+      // You might want to show an error message to the user
     } finally {
       setIsSubmitting(false);
     }

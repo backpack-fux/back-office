@@ -34,6 +34,11 @@ export type DestinationAccount = {
   network: SupportedBlockchain;
 };
 
+export type SourceAccount = {
+  payment_rail: BridgePaymentRailEnum;
+  currency: BridgeCurrencyEnum;
+};
+
 // Constants
 export const destinationAccountPlaceholder = "0xDeadBeef";
 
