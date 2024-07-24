@@ -117,7 +117,6 @@ export default function PrefundedTransferTabs() {
     // Remove non-numeric characters except for the decimal point
     const numericValue = value.replace(/[^0-9.]/g, "");
 
-    // Ensure only one decimal point
     const parts = numericValue.split(".");
     const formattedValue = parts[0] + (parts.length > 1 ? "." + parts[1].slice(0, 2) : "");
 
