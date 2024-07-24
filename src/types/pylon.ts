@@ -8,3 +8,8 @@ export type BridgePrefundedAccountResponse = {
   currency: string;
   name: string;
 };
+
+export type BridgePrefundedAccountTransferResponse = {
+  id: string;
+  status: string;
+};

@@ -1,3 +1,5 @@
+import { GithubIcon, TwitterIcon } from "@/components/icons";
+
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
@@ -60,9 +62,20 @@ export const siteConfig = {
     },
   ],
   links: {
-    github: "https://github.com/backpack-fux",
-    twitter: "https://twitter.com/backpack_fux",
-    docs: "https://docs-backpack-network.vercel.app/",
+    github: {
+      label: "GitHub",
+      icon: GithubIcon,
+      href: "https://github.com/backpack-fux",
+    },
+    twitter: {
+      label: "Twitter",
+      icon: TwitterIcon,
+      href: "https://twitter.com/backpack_fux",
+    },
+    docs: {
+      label: "Docs",
+      href: "https://docs-backpack-network.vercel.app/",
+    },
     discord: "https://discord.gg/fMf2CY5P",
     campaign: "https://fabric.xyz/",
   },

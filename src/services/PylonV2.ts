@@ -1,7 +1,7 @@
 import { RequestInit } from "next/dist/server/web/spec-extension/request";
 
-import { BridgePrefundedAccountResponse, GenerateJWTResponse } from "@/types/api";
-import Cookies from "js-cookie";
+import { BridgeCurrencyEnum, SourceAccount, SupportedBlockchain } from "@/types/bridge";
+import { BridgePrefundedAccountResponse, BridgePrefundedAccountTransferResponse, GenerateJWTResponse } from "@/types/pylon";
 
 type RequestOptions = Omit<RequestInit, "body"> & { body?: string | object };
 
@@ -58,6 +58,30 @@ export class PylonV2Service {
     return await this.request(`${this.apiBaseUrl}/v1/bridge/prefunded-account-balance`, {
       method: this.methods.POST,
       headers: this.headers(false),
+      credentials: "include",
+    });
+  }
+
+  public async createPrefundedAccountTransfer(transferData: {
+    amount: number;
+    on_behalf_of: string;
+    developer_fee?: number;
+    source: SourceAccount & {
+      currency: BridgeCurrencyEnum;
+      prefunded_account_id: string;
+    };      
+    destination: {
+      payment_rail: SupportedBlockchain;
+      currency: BridgeCurrencyEnum;
+      to_address: string;
+    };
+  }): Promise<BridgePrefundedAccountTransferResponse> {
+    return await this.request(`${this.apiBaseUrl}/v1/bridge/prefunded-account-transfer`, {
+      method: this.methods.POST,
+      headers: {
+        ...this.headers(true),
+      },
+      body: JSON.stringify(transferData),
       credentials: "include",
     });
   }

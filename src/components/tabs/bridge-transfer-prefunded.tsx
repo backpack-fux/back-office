@@ -1,8 +1,10 @@
 import { KeyboardEvent, useCallback, useState } from "react";
 
+import { Button } from "@nextui-org/button";
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
 import { Input } from "@nextui-org/input";
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/modal";
 import { Select, SelectItem } from "@nextui-org/select";
 import { Snippet } from "@nextui-org/snippet";
 import { Tab, Tabs } from "@nextui-org/tabs";
@@ -11,15 +13,18 @@ import { useBridgeAccount } from "@/hooks/useBridgeBalance";
 
 import {
   BridgeCurrencyEnum,
+  BridgePaymentRailEnum,
   DestinationAccount,
   SupportedBlockchain,
   oboCustomers,
   prefundedCurrencyOptions,
   prefundedNetworkOptions,
-} from "@/components/data/bridge";
-import { isValidEVMAddress } from "@/components/utils/bridge";
+} from "@/types/bridge";
+import { getValidNetworksForAddress, isValidEVMAddress } from "@/utils/bridge";
 
-import { Button } from "@nextui-org/button";
+import { PylonV2Service } from "@/services/PylonV2";
+
+const pylonService = new PylonV2Service();
 
 export default function PrefundedTransferTabs() {
   const { isLoading, accountName, accountId } = useBridgeAccount();
@@ -32,11 +37,41 @@ export default function PrefundedTransferTabs() {
   const [transferFeeError, setTransferFeeError] = useState("");
   const [selectedTab, setSelectedTab] = useState("account");
   const [selectedCurrency, setSelectedCurrency] = useState<BridgeCurrencyEnum | "">("");
+  const [validNetworks, setValidNetworks] = useState<SupportedBlockchain[]>([]);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [destinationAccount, setDestinationAccount] = useState<DestinationAccount>({
     address: "",
     network: "" as SupportedBlockchain,
   });
+
+  const [combinedData, setCombinedData] = useState<{
+    amount: number;
+    oboCustomer: string;
+    transferFee: number;
+    destinationAddress: string;
+    network: SupportedBlockchain;
+    currency: BridgeCurrencyEnum;
+  }>({
+    amount: 0,
+    oboCustomer: "",
+    transferFee: 0,
+    destinationAddress: "",
+    network: BridgePaymentRailEnum.POLYGON,
+    currency: BridgeCurrencyEnum.USD,
+  });
+
+  const updateValidNetworks = useCallback((address: string) => {
+    const networks = getValidNetworksForAddress(address);
+    setValidNetworks(networks);
+  }, []);
+
+  const handleDestinationAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newAddress = e.target.value;
+    setDestinationAccount((prev) => ({ ...prev, address: newAddress }));
+    updateValidNetworks(newAddress);
+  };
 
   const tabs = [
     {
@@ -127,12 +162,65 @@ export default function PrefundedTransferTabs() {
 
   const handleSetValues = () => {
     if (amount && selectedOboCustomer && transferFee) {
+      setCombinedData((prev) => ({
+        ...prev,
+        amount: parseFloat(amount),
+        oboCustomer: selectedOboCustomer,
+        transferFee: parseFloat(transferFee),
+      }));
       setSelectedTab("destination");
     }
   };
 
+  const handleSubmit = () => {
+    if (destinationAccount.address && destinationAccount.network && selectedCurrency) {
+      setCombinedData((prev) => ({
+        ...prev,
+        destinationAddress: destinationAccount.address,
+        network: destinationAccount.network,
+        currency: selectedCurrency,
+      }));
+      setIsConfirmModalOpen(true);
+    }
+  };
+
+  const handleConfirmTransfer = async () => {
+    setIsSubmitting(true);
+    try {
+      const transferData = {
+        amount: combinedData.amount,
+        on_behalf_of: combinedData.oboCustomer,
+        developer_fee: combinedData.transferFee ? combinedData.transferFee : undefined,
+        source: {
+          payment_rail: BridgePaymentRailEnum.PREFUNDED,
+          currency: BridgeCurrencyEnum.USD,
+          prefunded_account_id: accountId,
+        },
+        destination: {
+          payment_rail: combinedData.network as SupportedBlockchain,
+          currency: combinedData.currency as BridgeCurrencyEnum,
+          to_address: combinedData.destinationAddress,
+        },
+      };
+
+      const response = await pylonService.createPrefundedAccountTransfer(transferData);
+
+      console.log("Transfer submitted successfully:", response);
+
+      // Close modal and reset form
+      setIsConfirmModalOpen(false);
+      // Reset form fields here
+      // You might want to show a success message to the user
+    } catch (error) {
+      console.error("Error submitting transfer:", error);
+      // You might want to show an error message to the user
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <div className="flex w-full flex-col">
+    <>
       <Tabs
         aria-label="Transfer options"
         selectedKey={selectedTab}
@@ -231,27 +319,28 @@ export default function PrefundedTransferTabs() {
                     <Input
                       className="max-w-xs"
                       label="Destination Address"
-                      placeholder="0x..."
+                      placeholder="0xdeadbeef"
                       value={destinationAccount.address}
-                      onChange={(e) =>
-                        setDestinationAccount((prev) => ({ ...prev, address: e.target.value }))
-                      }
+                      onChange={handleDestinationAddressChange}
                       isInvalid={
                         destinationAccount.address !== "" &&
                         !isValidEVMAddress(destinationAccount.address)
                       }
                       errorMessage={
                         destinationAccount.address && !isValidEVMAddress(destinationAccount.address)
-                          ? "Invalid EVM address"
+                          ? "Invalid address"
                           : ""
                       }
                     />
                     <div className="h-4" />
                     <Select
                       className="max-w-xs"
-                      items={prefundedNetworkOptions}
+                      items={prefundedNetworkOptions.filter((option) =>
+                        validNetworks.includes(option.key as SupportedBlockchain)
+                      )}
                       label="Network Options"
                       placeholder="Select a network as your payment rail"
+                      // isDisabled={validNetworks.length === 0}
                       onChange={(e) =>
                         setDestinationAccount((prev) => ({
                           ...prev,
@@ -271,6 +360,18 @@ export default function PrefundedTransferTabs() {
                     >
                       {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
                     </Select>
+                    <div className="h-4" />
+                    <Button
+                      color="primary"
+                      onClick={handleSubmit}
+                      disabled={
+                        !destinationAccount.address ||
+                        !destinationAccount.network ||
+                        !selectedCurrency
+                      }
+                    >
+                      Submit Transfer
+                    </Button>
                   </>
                 )}
               </CardBody>
@@ -278,6 +379,69 @@ export default function PrefundedTransferTabs() {
           </Tab>
         ))}
       </Tabs>
-    </div>
+      <Modal
+        isOpen={isConfirmModalOpen}
+        onClose={() => setIsConfirmModalOpen(false)}
+        size="3xl"
+        scrollBehavior="inside"
+      >
+        <ModalContent>
+          <ModalHeader className="flex flex-col gap-1">Confirm Transfer</ModalHeader>
+          <ModalBody>
+            <Snippet
+              symbol="Receipt"
+              variant="bordered"
+              color="default"
+              codeString={`
+                From: ${accountName}
+                Amount: $${combinedData.amount}
+                Transfer Fee: $${combinedData.transferFee}
+                OBO Customer: ${combinedData.oboCustomer}
+                To: ${combinedData.destinationAddress}
+                Network: ${combinedData.network}
+                Currency: ${combinedData.currency}
+                Total: $${(combinedData.amount + combinedData.transferFee).toFixed(2)}
+              `}
+            >
+              <div className="space-y-2">
+                <p>
+                  <strong>From:</strong> {accountName}
+                </p>
+                <p>
+                  <strong>Amount:</strong> ${combinedData.amount}
+                </p>
+                <p>
+                  <strong>Transfer Fee:</strong> ${combinedData.transferFee}
+                </p>
+                <p>
+                  <strong>OBO Customer:</strong> {combinedData.oboCustomer}
+                </p>
+                <p>
+                  <strong>To:</strong> {combinedData.destinationAddress}
+                </p>
+                <p>
+                  <strong>Network:</strong> {combinedData.network}
+                </p>
+                <p>
+                  <strong>Currency:</strong> {combinedData.currency}
+                </p>
+                <p>
+                  <strong>Total:</strong> $
+                  {(combinedData.amount + combinedData.transferFee).toFixed(2)}
+                </p>
+              </div>
+            </Snippet>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="danger" variant="light" onPress={() => setIsConfirmModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button color="primary" onPress={handleConfirmTransfer} isLoading={isSubmitting}>
+              Confirm Transfer
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   );
 }
