@@ -2,7 +2,6 @@ import { RequestInit } from "next/dist/server/web/spec-extension/request";
 
 import { BridgeCurrencyEnum, SourceAccount, SupportedBlockchain } from "@/types/bridge";
 import { BridgePrefundedAccountResponse, BridgePrefundedAccountTransferResponse, GenerateJWTResponse } from "@/types/pylon";
-import { generateIdempotencyKey } from "@/utils/bridge";
 
 type RequestOptions = Omit<RequestInit, "body"> & { body?: string | object };
 
@@ -70,19 +69,17 @@ export class PylonV2Service {
     source: SourceAccount & {
       currency: BridgeCurrencyEnum;
       prefunded_account_id: string;
-    };
+    };      
     destination: {
       payment_rail: SupportedBlockchain;
       currency: BridgeCurrencyEnum;
       to_address: string;
     };
   }): Promise<BridgePrefundedAccountTransferResponse> {
-    const idempotencyKey = generateIdempotencyKey();
     return await this.request(`${this.apiBaseUrl}/v1/bridge/prefunded-account-transfer`, {
       method: this.methods.POST,
       headers: {
         ...this.headers(true),
-        'Idempotency-Key': idempotencyKey,
       },
       body: JSON.stringify(transferData),
       credentials: "include",

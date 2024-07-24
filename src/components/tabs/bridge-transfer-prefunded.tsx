@@ -46,13 +46,20 @@ export default function PrefundedTransferTabs() {
     network: "" as SupportedBlockchain,
   });
 
-  const [combinedData, setCombinedData] = useState({
-    amount: "",
+  const [combinedData, setCombinedData] = useState<{
+    amount: number;
+    oboCustomer: string;
+    transferFee: number;
+    destinationAddress: string;
+    network: SupportedBlockchain;
+    currency: BridgeCurrencyEnum;
+  }>({
+    amount: 0,
     oboCustomer: "",
-    transferFee: "",
+    transferFee: 0,
     destinationAddress: "",
-    network: "",
-    currency: "",
+    network: BridgePaymentRailEnum.POLYGON,
+    currency: BridgeCurrencyEnum.USD,
   });
 
   const updateValidNetworks = useCallback((address: string) => {
@@ -157,9 +164,9 @@ export default function PrefundedTransferTabs() {
     if (amount && selectedOboCustomer && transferFee) {
       setCombinedData((prev) => ({
         ...prev,
-        amount,
+        amount: parseFloat(amount),
         oboCustomer: selectedOboCustomer,
-        transferFee,
+        transferFee: parseFloat(transferFee),
       }));
       setSelectedTab("destination");
     }
@@ -181,12 +188,12 @@ export default function PrefundedTransferTabs() {
     setIsSubmitting(true);
     try {
       const transferData = {
-        amount: parseFloat(combinedData.amount),
+        amount: combinedData.amount,
         on_behalf_of: combinedData.oboCustomer,
-        developer_fee: combinedData.transferFee ? parseFloat(combinedData.transferFee) : undefined,
+        developer_fee: combinedData.transferFee ? combinedData.transferFee : undefined,
         source: {
           payment_rail: BridgePaymentRailEnum.PREFUNDED,
-          currency: combinedData.currency as BridgeCurrencyEnum.USD,
+          currency: BridgeCurrencyEnum.USD,
           prefunded_account_id: accountId,
         },
         destination: {
@@ -386,15 +393,15 @@ export default function PrefundedTransferTabs() {
               variant="bordered"
               color="default"
               codeString={`
-From: ${accountName}
-Amount: $${combinedData.amount}
-Transfer Fee: $${combinedData.transferFee}
-OBO Customer: ${combinedData.oboCustomer}
-To: ${combinedData.destinationAddress}
-Network: ${combinedData.network}
-Currency: ${combinedData.currency}
-Total: $${(parseFloat(combinedData.amount) + parseFloat(combinedData.transferFee)).toFixed(2)}
-        `}
+                From: ${accountName}
+                Amount: $${combinedData.amount}
+                Transfer Fee: $${combinedData.transferFee}
+                OBO Customer: ${combinedData.oboCustomer}
+                To: ${combinedData.destinationAddress}
+                Network: ${combinedData.network}
+                Currency: ${combinedData.currency}
+                Total: $${(combinedData.amount + combinedData.transferFee).toFixed(2)}
+              `}
             >
               <div className="space-y-2">
                 <p>
@@ -420,9 +427,7 @@ Total: $${(parseFloat(combinedData.amount) + parseFloat(combinedData.transferFee
                 </p>
                 <p>
                   <strong>Total:</strong> $
-                  {(parseFloat(combinedData.amount) + parseFloat(combinedData.transferFee)).toFixed(
-                    2
-                  )}
+                  {(combinedData.amount + combinedData.transferFee).toFixed(2)}
                 </p>
               </div>
             </Snippet>
