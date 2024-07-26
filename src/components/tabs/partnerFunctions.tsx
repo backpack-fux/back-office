@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import PrefundedTransferTabs from "./bridge-transfer-prefunded";
+import PrefundedTransferTabs from "./prefundedTransferTabs";
 
 interface PartnerFunctionsProps {
   selectedPartner: string;

@@ -7,7 +7,7 @@ export const title = tv({
       charyo: "text-charyo-500",
       ualert: "text-ualert-500",
       notpurple: "text-notpurple-500",
-      
+
       chardient: "from-[#999999] to-[#0d0d0d]",
       alertient: "from-[#ffc0f7] to-[#660050]",
       notient: "from-[#faf9fd] to-[#636365]",
@@ -31,7 +31,7 @@ export const title = tv({
   defaultVariants: {
     size: "md",
   },
-compoundVariants: [
+  compoundVariants: [
     {
       color: [
         "chardient",
@@ -46,7 +46,7 @@ compoundVariants: [
 
         "foreground",
       ],
-      class: "bg-clip-text text-transparent bg-gradient-to-b",
+      class: "bg-gradient-to-b bg-clip-text text-transparent",
     },
   ],
 });
@@ -61,7 +61,7 @@ export const subtitle = tv({
       charyo: "text-charyo-500",
       ualert: "text-ualert-500",
       notpurple: "text-notpurple-500",
-      
+
       chardient: "from-[#999999] to-[#0d0d0d]",
       alertient: "from-[#ffc0f7] to-[#660050]",
       notient: "from-[#faf9fd] to-[#636365]",

@@ -16,8 +16,8 @@ export const SignOutButton = () => {
   return (
     <Button
       className="bg-danger text-sm font-normal text-danger-foreground"
-      onClick={handleSignOut}
       variant="flat"
+      onClick={handleSignOut}
     >
       Sign Out
     </Button>

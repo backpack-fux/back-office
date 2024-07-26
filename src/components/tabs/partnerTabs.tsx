@@ -5,7 +5,7 @@ import { Link } from "@nextui-org/link";
 import { Tab, Tabs } from "@nextui-org/tabs";
 import { useState } from "react";
 
-import PartnerFunctions from "@/components/tabs/partner-functions";
+import PartnerFunctions from "@/components/tabs/partnerFunctions";
 import { useBridgeAccount } from "@/hooks/useBridgeBalance";
 import { formatBalance } from "@/utils/helper";
 

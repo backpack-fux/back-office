@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { subtitle, title } from "@/components/primitives";
 import { SignInModal } from "@/components/siwn";
 
-const PartnerTabs = dynamic(() => import("@/components/tabs/partners"), {
+const PartnerTabs = dynamic(() => import("@/components/tabs/partnerTabs"), {
   ssr: false,
 });
 

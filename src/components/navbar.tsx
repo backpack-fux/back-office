@@ -17,6 +17,7 @@ import NextLink from "next/link";
 import { DiscordIcon, GithubIcon, Logo, SearchIcon, TwitterIcon } from "@/components/icons";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { siteConfig } from "@/config/site";
+
 import { SignOutButton } from "./sown";
 
 export const Navbar = () => {
@@ -105,8 +106,8 @@ export const Navbar = () => {
                   index === 2
                     ? "primary"
                     : index === siteConfig.navMenuItems.length - 1
-                    ? "danger"
-                    : "foreground"
+                      ? "danger"
+                      : "foreground"
                 }
                 href="#"
                 size="lg"

@@ -1,7 +1,11 @@
 import { RequestInit } from "next/dist/server/web/spec-extension/request";
 
 import { BridgeCurrencyEnum, SourceAccount, SupportedBlockchain } from "@/types/bridge";
-import { BridgePrefundedAccountResponse, BridgePrefundedAccountTransferResponse, GenerateJWTResponse } from "@/types/pylon";
+import {
+  BridgePrefundedAccountResponse,
+  BridgePrefundedAccountTransferResponse,
+  GenerateJWTResponse,
+} from "@/types/pylon";
 
 type RequestOptions = Omit<RequestInit, "body"> & { body?: string | object };
 
@@ -69,7 +73,7 @@ export class PylonV2Service {
     source: SourceAccount & {
       currency: BridgeCurrencyEnum;
       prefunded_account_id: string;
-    };      
+    };
     destination: {
       payment_rail: SupportedBlockchain;
       currency: BridgeCurrencyEnum;
