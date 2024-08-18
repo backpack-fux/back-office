@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { Button } from "@nextui-org/button";
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
 import { Snippet } from "@nextui-org/snippet";
-import { Button } from "@nextui-org/button";
+import { useState } from "react";
 
 import { formatAmount, validateAmount } from "@/utils/bridge";
 
-import AmountInput from "../inputs/amountInput";
-import CustomerSelect from "../inputs/customerSelect";
-import TransferFeeInput from "../inputs/transferFeeInput";
+import AmountInput from "@/components/inputs/amountInput";
+import CustomerSelect from "@/components/inputs/customerSelect";
+import TransferFeeInput from "@/components/inputs/transferFeeInput";
 
 type AccountTabProps = {
   accountId: string;
