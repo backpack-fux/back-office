@@ -1,23 +1,16 @@
 "use client";
 
 import { Button } from "@nextui-org/button";
-import { useNeynarContext } from "@neynar/react";
-import Cookies from "js-cookie";
+import { useSignOut } from "@/hooks/useSignOut";
 
 export const SignOutButton = () => {
-  const { logoutUser } = useNeynarContext();
-
-  const handleSignOut = () => {
-    logoutUser();
-    Cookies.remove("pyv2_auth_token"); // TODO: we need to create an API route to delete the auth token
-    window.location.reload();
-  };
+  const signOut = useSignOut();
 
   return (
     <Button
       className="bg-danger text-sm font-normal text-danger-foreground"
       variant="flat"
-      onClick={handleSignOut}
+      onClick={signOut}
     >
       Sign Out
     </Button>
