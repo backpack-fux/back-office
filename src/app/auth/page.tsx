@@ -5,11 +5,10 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { SignInModal } from "@/components/siwn";
-import { PylonV2Service } from "@/services/PylonV2";
-
-const pylonService = new PylonV2Service();
+import { useAuthHooks } from "@/hooks/usePylonHooks";
 
 export default function SignInPage() {
+  const { generateFarcasterJWT, isLoading, error } = useAuthHooks();
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
   const { user, isAuthenticated } = useNeynarContext();
   const router = useRouter();
@@ -17,9 +16,11 @@ export default function SignInPage() {
   useEffect(() => {
     const generateToken = async (signer_uuid: string, fid: number) => {
       try {
-        const response = await pylonService.generateAccessToken(signer_uuid, fid);
-
+        const response = await generateFarcasterJWT({ signerUuid: signer_uuid, fid });
+        console.log("generateToken", response);
+        console.log("generateToken", response.message);
         if (response.message === "success") {
+          //router.push("/dashboard");
           window.location.reload();
         } else {
           console.error("Failed to generate token:", response);
@@ -32,14 +33,18 @@ export default function SignInPage() {
 
     if (!user) {
       setIsSignInModalOpen(true);
-    } else if (isAuthenticated) {
-      if (user) {
-        generateToken(user.signer_uuid, user.fid);
-      } else {
-        console.error("User does not have a valid FID");
-      }
+    } else if (isAuthenticated && user) {
+      generateToken(user.signer_uuid, user.fid);
     }
-  }, [user, router, isAuthenticated]);
+  }, [user, isAuthenticated, generateFarcasterJWT, router]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return <SignInModal isOpen={isSignInModalOpen} />;
 }

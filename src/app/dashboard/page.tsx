@@ -6,42 +6,54 @@ import { useEffect, useState } from "react";
 
 import { subtitle, title } from "@/components/primitives";
 import { SignInModal } from "@/components/siwn";
+import { useRouter } from "next/navigation";
 
 const PartnerTabs = dynamic(() => import("@/components/tabs/partnerTabs"), {
   ssr: false,
 });
 
 export default function Dashboard() {
-  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
-  const { user } = useNeynarContext();
+  console.log("Dashboard rendering");
+  const [isLoading, setIsLoading] = useState(true);
+  const { user, isAuthenticated } = useNeynarContext();
+  const router = useRouter();
+
+  console.log("Dashboard rendering. User:", user, "isAuthenticated:", isAuthenticated);
 
   useEffect(() => {
-    if (!user) {
-      setIsSignInModalOpen(true);
+    console.log("useEffect running. isAuthenticated:", isAuthenticated);
+    if (!isAuthenticated) {
+      console.log("Not authenticated, attempting to redirect to /auth");
+      router.push("/auth");
+    } else {
+      console.log("Authenticated, setting isLoading to false");
+      setIsLoading(false);
     }
-  }, [user]);
+  }, [isAuthenticated, router]);
 
-  const handleCloseSignInModal = () => {
-    if (user) {
-      setIsSignInModalOpen(false);
-    }
-  };
+  if (isLoading) {
+    console.log("Rendering loading state");
+    return <div>Loading...</div>;
+  }
 
+  if (!user) {
+    console.log("No user, rendering SignInModal");
+    return <SignInModal isOpen={true} />;
+  }
+
+  console.log("Rendering dashboard content");
   return (
-    <>
-      <SignInModal isOpen={isSignInModalOpen} onClose={handleCloseSignInModal} />
-      <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-        <div className="inline-block max-w-lg justify-center text-center">
-          <h1 className={title({ color: "charyo" })}>Battle Stations&nbsp;</h1>
-          <br />
-          <h2 className={subtitle({ class: "mt-4", color: "charyo" })}>
-            Heads down, keep building
-          </h2>
-        </div>
-        <div className="mt-8 flex w-full max-w-7xl gap-4">
-          <PartnerTabs />
-        </div>
-      </section>
-    </>
+    <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
+      <div className="inline-block max-w-lg justify-center text-center">
+        <h1 className={title({ color: "charyo" })}>Battle Stations&nbsp;</h1>
+        <br />
+        <h2 className={subtitle({ class: "mt-4", color: "charyo" })}>
+          Heads down, keep building
+        </h2>
+      </div>
+      <div className="mt-8 flex w-full max-w-7xl gap-4">
+        <PartnerTabs />
+      </div>
+    </section>
   );
 }

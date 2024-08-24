@@ -8,13 +8,6 @@ interface SignInModalProps {
 }
 
 export function SignInModal({ isOpen, onClose }: SignInModalProps) {
-  const { user } = useNeynarContext();
-
-  useEffect(() => {
-    if (user) {
-      onClose?.();
-    }
-  }, [user, onClose]);
 
   return (
     <Modal
