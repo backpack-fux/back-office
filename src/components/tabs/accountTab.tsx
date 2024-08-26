@@ -24,6 +24,7 @@ export default function AccountTab({ accountId, handleSetValues }: AccountTabPro
 
   const handleAmountChange = (value: string) => {
     const formattedValue = formatAmount(value);
+
     console.log("handleAmountChange", formattedValue);
 
     setAmount(formattedValue);
@@ -37,6 +38,7 @@ export default function AccountTab({ accountId, handleSetValues }: AccountTabPro
 
   const handleTransferFeeChange = (value: string) => {
     const formattedValue = formatAmount(value);
+
     console.log("handleTransferFeeChange", formattedValue);
     setTransferFee(formattedValue);
     setTransferFeeError(validateAmount(formattedValue, true));

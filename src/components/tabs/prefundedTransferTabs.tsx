@@ -1,17 +1,21 @@
-import { useState, useEffect, useCallback } from 'react';
 import { Tab, Tabs } from "@nextui-org/tabs";
-//import { useGetPrefundedAccountBalance, useCreatePrefundedAccountTransfer } from '@/hooks/bridge/useBridge';
-import pylon from '@/libs/pylon';
-import { useBridgeBalance } from '@backpack-fux/pylon-sdk';
 
+//import { useGetPrefundedAccountBalance, useCreatePrefundedAccountTransfer } from '@/hooks/bridge/useBridge';
+import { useBridgeBalance } from "@backpack-fux/pylon-sdk";
+
+import pylon from "@/libs/pylon";
 import AccountTab from "@/components/tabs/accountTab";
 import DestinationTab from "@/components/tabs/destinationTab";
 import ConfirmModal from "@/components/modals/confirmModal";
-import { usePrefundedTransfer } from '@/hooks/bridge/usePrefundedTransfer';
-
+import { usePrefundedTransfer } from "@/hooks/bridge/usePrefundedTransfer";
 
 export default function PrefundedTransferTabs() {
-  const { balance, isLoading: balanceLoading, accountId, accountName } = useBridgeBalance({ pylonInstance: pylon });
+  const {
+    balance,
+    isLoading: balanceLoading,
+    accountId,
+    accountName,
+  } = useBridgeBalance({ pylonInstance: pylon });
 
   const {
     combinedData,
@@ -24,8 +28,6 @@ export default function PrefundedTransferTabs() {
     selectedTab,
     setSelectedTab,
   } = usePrefundedTransfer(accountId);
-
-
 
   // const handleSetValues = (data: any) => {
   //   setCombinedData((prev: any) => ({ ...prev, ...data }));
@@ -60,26 +62,25 @@ export default function PrefundedTransferTabs() {
 
   return (
     <>
-
-        <Tabs
-          aria-label="Transfer options"
-          selectedKey={selectedTab}
-          onSelectionChange={(key) => setSelectedTab(key as string)}
-        >
-          {tabs.map((tab) => (
-            <Tab key={tab.id} title={tab.label}>
-              {tab.content}
-            </Tab>
-          ))}
-        </Tabs>
-        {combinedData && (
-          <ConfirmModal
-            isOpen={isConfirmModalOpen}
-            onClose={() => setIsConfirmModalOpen(false)}
-            combinedData={combinedData}
-            accountName={accountName}
-            onConfirm={handleConfirmTransfer}
-            isSubmitting={isSubmitting}
+      <Tabs
+        aria-label="Transfer options"
+        selectedKey={selectedTab}
+        onSelectionChange={(key) => setSelectedTab(key as string)}
+      >
+        {tabs.map((tab) => (
+          <Tab key={tab.id} title={tab.label}>
+            {tab.content}
+          </Tab>
+        ))}
+      </Tabs>
+      {combinedData && (
+        <ConfirmModal
+          accountName={accountName}
+          combinedData={combinedData}
+          isOpen={isConfirmModalOpen}
+          isSubmitting={isSubmitting}
+          onClose={() => setIsConfirmModalOpen(false)}
+          onConfirm={handleConfirmTransfer}
         />
       )}
     </>

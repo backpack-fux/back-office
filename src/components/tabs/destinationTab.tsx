@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
 import { Button } from "@nextui-org/button";
+import { BridgeCurrency } from "@backpack-fux/pylon-sdk";
 
 import { isValidEVMAddress, getValidNetworksForAddress } from "@/utils/bridge";
-import { BridgeCurrency } from "@backpack-fux/pylon-sdk";
 import { SupportedBlockchain } from "@/types/bridge";
 
 import DestinationAddressInput from "../inputs/destinationAddressInput";

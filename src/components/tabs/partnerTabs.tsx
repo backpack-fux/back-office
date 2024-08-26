@@ -3,11 +3,11 @@ import { Divider } from "@nextui-org/divider";
 import { Image } from "@nextui-org/image";
 import { Link } from "@nextui-org/link";
 import { Tab, Tabs } from "@nextui-org/tabs";
-import { useEffect, useState } from "react";
-import PartnerFunctions from "@/components/tabs/partnerFunctions";
-import { formatBalance } from "@/utils/helper";
-import pylon from "@/libs/pylon";
+import { useState } from "react";
 import { useBridgeBalance } from "@backpack-fux/pylon-sdk";
+
+import PartnerFunctions from "@/components/tabs/partnerFunctions";
+import pylon from "@/libs/pylon";
 
 export default function PartnerTabs() {
   const pylonInstance = pylon;
@@ -19,9 +19,7 @@ export default function PartnerTabs() {
       id: "bridge",
       label: "Bridge",
       content: "Bridge is used for on-ramps and off-ramps of stable coins",
-      balance: isLoading 
-        ? "Loading..." 
-        : `${balance.toFixed(2)} ${currency}`,
+      balance: isLoading ? "Loading..." : `${balance.toFixed(2)} ${currency}`,
       functions: ["Account Balance", "Account Transfers"],
       links: [
         {

@@ -2,8 +2,9 @@
 
 import { Button } from "@nextui-org/button";
 import { useNeynarContext } from "@neynar/react";
+import { useCallback } from "react";
+
 import { useDeleteFarcasterJWT } from "@/hooks/auth/useDeleteFarcasterJWT";
-import { useCallback, useState } from "react";
 
 export const SignOutButton = () => {
   const { logoutUser } = useNeynarContext();
@@ -23,9 +24,9 @@ export const SignOutButton = () => {
   return (
     <Button
       className="bg-danger text-sm font-normal text-danger-foreground"
+      isLoading={isLoading}
       variant="flat"
       onClick={handleSignOut}
-      isLoading={isLoading}
     >
       Sign Out
     </Button>

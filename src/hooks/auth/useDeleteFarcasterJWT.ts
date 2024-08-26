@@ -1,7 +1,8 @@
 // src/hooks/useDeleteFarcasterJWT.ts
 
-import { useState, useCallback } from 'react';
-import pylonInstance from '@/libs/pylon';
+import { useState, useCallback } from "react";
+
+import pylonInstance from "@/libs/pylon";
 
 interface UseDeleteFarcasterJWTResult {
   deleteJWT: () => Promise<void>;
@@ -22,10 +23,11 @@ export function useDeleteFarcasterJWT(): UseDeleteFarcasterJWTResult {
 
     try {
       const response = await pylonInstance.deleteFarcasterJWT();
+
       console.log("response in deleteJWT hook", response);
       setMessage(response.message);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('An unknown error occurred'));
+      setError(err instanceof Error ? err : new Error("An unknown error occurred"));
     } finally {
       setIsLoading(false);
     }

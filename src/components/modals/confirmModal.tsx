@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/modal";
 import { Button } from "@nextui-org/button";
 import { Snippet } from "@nextui-org/snippet";
-import { BridgeCurrency, SupportedBlockchain } from "@/types/bridge";
 import Confetti from "react-confetti";
+
+import { BridgeCurrency, SupportedBlockchain } from "@/types/bridge";
 
 type ConfirmModalProps = {
   isOpen: boolean;
@@ -17,7 +18,7 @@ type ConfirmModalProps = {
     destinationAddress: string;
     network: SupportedBlockchain;
     currency: BridgeCurrency;
-  };
+  } | null;
   accountName: string;
   onConfirm: () => Promise<void>;
   isSubmitting: boolean;
@@ -31,10 +32,6 @@ export default function ConfirmModal({
   onConfirm,
   isSubmitting,
 }: ConfirmModalProps) {
-  if (!combinedData) {
-    return null;
-  }
-
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -46,6 +43,7 @@ export default function ConfirmModal({
         setShowConfetti(false);
         onClose();
       }, 3000);
+
       return () => clearTimeout(timer);
     }
   }, [isSuccess, onClose]);
@@ -61,11 +59,15 @@ export default function ConfirmModal({
     }
   };
 
+  if (!combinedData) {
+    return null;
+  }
+
   const { amount, oboCustomer, transferFee, destinationAddress, network, currency } = combinedData;
 
   return (
     <>
-      {showConfetti && <Confetti recycle={false} numberOfPieces={200} />}
+      {showConfetti && <Confetti numberOfPieces={200} recycle={false} />}
       <Modal isOpen={isOpen} scrollBehavior="inside" size="3xl" onClose={onClose}>
         <ModalContent>
           <ModalHeader className="flex flex-col gap-1">
@@ -73,14 +75,17 @@ export default function ConfirmModal({
           </ModalHeader>
           <ModalBody>
             {error && (
-              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+              <div
+                className="relative mb-4 rounded border border-red-400 bg-red-100 px-4 py-3 text-red-700"
+                role="alert"
+              >
                 <strong className="font-bold">Error: </strong>
                 <span className="block sm:inline">{error}</span>
               </div>
             )}
             {isSuccess ? (
               <div className="text-center">
-                <p className="text-2xl font-bold text-green-600 mb-4">🎉 Transfer Completed! 🎉</p>
+                <p className="mb-4 text-2xl font-bold text-green-600">🎉 Transfer Completed! 🎉</p>
                 <p>Your transfer has been successfully processed.</p>
               </div>
             ) : (
@@ -100,14 +105,30 @@ export default function ConfirmModal({
                 variant="bordered"
               >
                 <div className="space-y-2">
-                  <p><strong>From:</strong> {accountName}</p>
-                  <p><strong>Amount:</strong> ${amount}</p>
-                  <p><strong>Transfer Fee:</strong> ${transferFee}</p>
-                  <p><strong>OBO Customer:</strong> {oboCustomer}</p>
-                  <p><strong>To:</strong> {destinationAddress}</p>
-                  <p><strong>Network:</strong> {network}</p>
-                  <p><strong>Currency:</strong> {currency}</p>
-                  <p><strong>Total:</strong> ${(amount + transferFee).toFixed(2)}</p>
+                  <p>
+                    <strong>From:</strong> {accountName}
+                  </p>
+                  <p>
+                    <strong>Amount:</strong> ${amount}
+                  </p>
+                  <p>
+                    <strong>Transfer Fee:</strong> ${transferFee}
+                  </p>
+                  <p>
+                    <strong>OBO Customer:</strong> {oboCustomer}
+                  </p>
+                  <p>
+                    <strong>To:</strong> {destinationAddress}
+                  </p>
+                  <p>
+                    <strong>Network:</strong> {network}
+                  </p>
+                  <p>
+                    <strong>Currency:</strong> {currency}
+                  </p>
+                  <p>
+                    <strong>Total:</strong> ${(amount + transferFee).toFixed(2)}
+                  </p>
                 </div>
               </Snippet>
             )}

@@ -1,17 +1,18 @@
-import { useState, useCallback } from 'react';
-import pylonInstance from '@/libs/pylon';
+import type {
+  CreatePrefundedAccountTransferBody,
+  CreatePrefundedAccountTransferResponse,
+} from "@backpack-fux/pylon-sdk/";
 
-import type { 
-  CreatePrefundedAccountTransferBody, 
-  CreatePrefundedAccountTransferResponse 
-} from '@backpack-fux/pylon-sdk/';
+import { useState, useCallback } from "react";
+
+import pylonInstance from "@/libs/pylon";
 
 type PrefundedAccountBalanceItem = {
-    id: string;
-    available_balance: string;
-    currency: string;
-    name: string;
-  };
+  id: string;
+  available_balance: string;
+  currency: string;
+  name: string;
+};
 
 export function useGetPrefundedAccountBalance() {
   const [balance, setBalance] = useState<PrefundedAccountBalanceItem[]>([]);
@@ -23,9 +24,10 @@ export function useGetPrefundedAccountBalance() {
     setError(null);
     try {
       const response = await pylonInstance.getPrefundedAccountBalance();
+
       setBalance(response.data);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('An unknown error occurred'));
+      setError(err instanceof Error ? err : new Error("An unknown error occurred"));
     } finally {
       setIsLoading(false);
     }
@@ -42,7 +44,8 @@ interface UseCreatePrefundedAccountTransferResult {
 }
 
 export function useCreatePrefundedAccountTransfer(): UseCreatePrefundedAccountTransferResult {
-  const [transferResult, setTransferResult] = useState<CreatePrefundedAccountTransferResponse | null>(null);
+  const [transferResult, setTransferResult] =
+    useState<CreatePrefundedAccountTransferResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -54,10 +57,11 @@ export function useCreatePrefundedAccountTransfer(): UseCreatePrefundedAccountTr
     try {
       console.log("params", params);
       const result = await pylonInstance.createPrefundedAccountTransfer(params);
+
       console.log("result", result);
       setTransferResult(result);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('An unknown error occurred'));
+      setError(err instanceof Error ? err : new Error("An unknown error occurred"));
     } finally {
       setIsLoading(false);
     }

@@ -1,6 +1,5 @@
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/modal";
-import { NeynarAuthButton, useNeynarContext } from "@neynar/react";
-import { useEffect } from "react";
+import { NeynarAuthButton } from "@neynar/react";
 
 interface SignInModalProps {
   isOpen: boolean;
@@ -8,7 +7,6 @@ interface SignInModalProps {
 }
 
 export function SignInModal({ isOpen, onClose }: SignInModalProps) {
-
   return (
     <Modal
       hideCloseButton

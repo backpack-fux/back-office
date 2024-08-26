@@ -1,7 +1,7 @@
 import { Select, SelectItem } from "@nextui-org/select";
+import { useCallback } from "react";
 
 import { oboCustomers } from "@/types/bridge";
-import { useCallback } from "react";
 
 type CustomerSelectProps = {
   value: string;
@@ -9,13 +9,16 @@ type CustomerSelectProps = {
 };
 
 export default function CustomerSelect({ value, onChange }: CustomerSelectProps) {
+  const handleSelectionChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const selectedValue = e.target.value;
 
-  const handleSelectionChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue = e.target.value;
-    console.log("Selected value:", selectedValue);
-    onChange(selectedValue);
-  }, [onChange]);
-  
+      console.log("Selected value:", selectedValue);
+      onChange(selectedValue);
+    },
+    [onChange]
+  );
+
   return (
     <Select
       className="max-w-xs"
