@@ -4,7 +4,8 @@ import { Divider } from "@nextui-org/divider";
 import { Button } from "@nextui-org/button";
 
 import { isValidEVMAddress, getValidNetworksForAddress } from "@/utils/bridge";
-import { BridgeCurrency, SupportedBlockchain } from "@/types/bridge";
+import { BridgeCurrency } from "@backpack-fux/pylon-sdk";
+import { SupportedBlockchain } from "@/types/bridge";
 
 import DestinationAddressInput from "../inputs/destinationAddressInput";
 import NetworkSelect from "../inputs/networkSelect";

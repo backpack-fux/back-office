@@ -2,26 +2,23 @@
 
 import { Button } from "@nextui-org/button";
 import { useNeynarContext } from "@neynar/react";
-import { useAuthHooks } from "@/hooks/usePylonHooks";
-import { useState } from "react";
+import { useDeleteFarcasterJWT } from "@/hooks/auth/useDeleteFarcasterJWT";
+import { useCallback, useState } from "react";
 
 export const SignOutButton = () => {
   const { logoutUser } = useNeynarContext();
-  const { deleteFarcasterJWT } = useAuthHooks();
-  const [isLoading, setIsLoading] = useState(false);
+  const { deleteJWT, isLoading, error } = useDeleteFarcasterJWT();
 
-  const handleSignOut = async () => {
-    setIsLoading(true);
+  const handleSignOut = useCallback(async () => {
     try {
-      await deleteFarcasterJWT();
+      await deleteJWT();
       logoutUser();
-      window.location.reload();
+      // Uncomment the next line if you want to reload the page after logout
+      // window.location.reload();
     } catch (error) {
       console.error("Error during sign out:", error);
-    } finally {
-      setIsLoading(false);
     }
-  };
+  }, [deleteJWT, logoutUser]);
 
   return (
     <Button

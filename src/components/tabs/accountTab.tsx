@@ -24,6 +24,7 @@ export default function AccountTab({ accountId, handleSetValues }: AccountTabPro
 
   const handleAmountChange = (value: string) => {
     const formattedValue = formatAmount(value);
+    console.log("handleAmountChange", formattedValue);
 
     setAmount(formattedValue);
     setAmountError(validateAmount(formattedValue));
@@ -31,17 +32,21 @@ export default function AccountTab({ accountId, handleSetValues }: AccountTabPro
 
   const handleOboCustomerChange = (value: string) => {
     setSelectedOboCustomer(value);
+    console.log("handleOboCustomerChange", selectedOboCustomer);
   };
 
   const handleTransferFeeChange = (value: string) => {
     const formattedValue = formatAmount(value);
-
+    console.log("handleTransferFeeChange", formattedValue);
     setTransferFee(formattedValue);
     setTransferFeeError(validateAmount(formattedValue, true));
   };
 
   const handleSubmit = () => {
     if (amount && selectedOboCustomer && transferFee) {
+      console.log("handleSubmit", amount);
+      console.log("handleSubmit", selectedOboCustomer);
+      console.log("handleSubmit", transferFee);
       handleSetValues({
         amount: parseFloat(amount),
         oboCustomer: selectedOboCustomer,

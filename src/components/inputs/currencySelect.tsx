@@ -1,6 +1,7 @@
 import { Select, SelectItem } from "@nextui-org/select";
 
-import { prefundedCurrencyOptions, BridgeCurrency } from "@/types/bridge";
+import { prefundedCurrencyOptions } from "@/types/bridge";
+import { BridgeCurrency } from "@backpack-fux/pylon-sdk";
 
 type CurrencySelectProps = {
   value: BridgeCurrency | null;

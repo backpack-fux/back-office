@@ -1,6 +1,7 @@
 import { Select, SelectItem } from "@nextui-org/select";
 
 import { oboCustomers } from "@/types/bridge";
+import { useCallback } from "react";
 
 type CustomerSelectProps = {
   value: string;
@@ -8,6 +9,13 @@ type CustomerSelectProps = {
 };
 
 export default function CustomerSelect({ value, onChange }: CustomerSelectProps) {
+
+  const handleSelectionChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = e.target.value;
+    console.log("Selected value:", selectedValue);
+    onChange(selectedValue);
+  }, [onChange]);
+  
   return (
     <Select
       className="max-w-xs"
@@ -15,7 +23,7 @@ export default function CustomerSelect({ value, onChange }: CustomerSelectProps)
       label="Bridge Customer ID"
       placeholder="Customer IDs in bridge dashboard"
       selectedKeys={value ? [value] : []}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={handleSelectionChange}
     >
       {(item) => <SelectItem key={item.value}>{item.label}</SelectItem>}
     </Select>

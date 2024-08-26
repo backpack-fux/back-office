@@ -3,21 +3,25 @@ import { Divider } from "@nextui-org/divider";
 import { Image } from "@nextui-org/image";
 import { Link } from "@nextui-org/link";
 import { Tab, Tabs } from "@nextui-org/tabs";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
 import PartnerFunctions from "@/components/tabs/partnerFunctions";
-import { useBridgeAccount } from "@/hooks/useBridgeBalance";
 import { formatBalance } from "@/utils/helper";
+import pylon from "@/libs/pylon";
+import { useBridgeBalance } from "@backpack-fux/pylon-sdk";
 
 export default function PartnerTabs() {
-  const { balance, currency, accountName, isLoading } = useBridgeAccount();
+  const pylonInstance = pylon;
+
+  const { balance, currency, isLoading } = useBridgeBalance({ pylonInstance });
 
   const tabs = [
     {
       id: "bridge",
       label: "Bridge",
       content: "Bridge is used for on-ramps and off-ramps of stable coins",
-      balance: isLoading ? "Loading..." : formatBalance(balance, currency),
+      balance: isLoading 
+        ? "Loading..." 
+        : `${balance.toFixed(2)} ${currency}`,
       functions: ["Account Balance", "Account Transfers"],
       links: [
         {

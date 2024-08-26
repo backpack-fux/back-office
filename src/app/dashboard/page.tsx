@@ -24,7 +24,7 @@ export default function Dashboard() {
     console.log("useEffect running. isAuthenticated:", isAuthenticated);
     if (!isAuthenticated) {
       console.log("Not authenticated, attempting to redirect to /auth");
-      router.push("/auth");
+      //router.push("/auth");
     } else {
       console.log("Authenticated, setting isLoading to false");
       setIsLoading(false);
