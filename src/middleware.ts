@@ -1,9 +1,10 @@
 import type { NextRequest } from "next/server";
 
 import { NextResponse } from "next/server";
+import { BACK_OFFICE_COOKIE_NAME } from "./utils/constants";
 
 export function middleware(request: NextRequest) {
-  const authToken = request.cookies.get("pyv2_auth_token");
+  const authToken = request.cookies.get(BACK_OFFICE_COOKIE_NAME);
   const isAuthRoute = request.nextUrl.pathname.startsWith("/auth");
   const isDashboardRoute = request.nextUrl.pathname.startsWith("/dashboard");
   const isHomePage = request.nextUrl.pathname === "/";
