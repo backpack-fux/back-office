@@ -10,7 +10,7 @@ export default function ForbiddenPage() {
   const { logoutUser } = useNeynarContext();
 
   const handleRetrySignIn = () => {
-    Cookies.remove("pyv2_auth_token");
+    Cookies.remove("pyv2_back_office_token");
     logoutUser();
     router.push("/");
   };

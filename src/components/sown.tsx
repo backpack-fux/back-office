@@ -9,7 +9,7 @@ export const SignOutButton = () => {
 
   const handleSignOut = () => {
     logoutUser();
-    Cookies.remove("pyv2_auth_token"); // TODO: we need to create an API route to delete the auth token
+    Cookies.remove("pyv2_back_office_token"); // TODO: we need to create an API route to delete the auth token
     window.location.reload();
   };
 
