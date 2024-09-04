@@ -30,15 +30,19 @@ export default function SignInPage() {
       }
     };
 
-    if (!user) {
-      setIsSignInModalOpen(true);
-    } else if (isAuthenticated) {
-      if (user) {
-        generateToken(user.signer_uuid, user.fid);
-      } else {
-        console.error("User does not have a valid FID");
+    const timer = setTimeout(() => {
+      if (!user) {
+        setIsSignInModalOpen(true);
+      } else if (isAuthenticated) {
+        if (user) {
+          generateToken(user.signer_uuid, user.fid);
+        } else {
+          console.error("User does not have a valid FID");
+        }
       }
-    }
+    }, 0 * 1000);
+
+    return () => clearTimeout(timer);
   }, [user, router, isAuthenticated]);
 
   return <SignInModal isOpen={isSignInModalOpen} />;

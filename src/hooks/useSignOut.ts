@@ -12,8 +12,9 @@ export const useSignOut = () => {
   const signOut = async () => {
     Cookies.remove(BACK_OFFICE_COOKIE_NAME);
     await pylonService.logout();
+    window.location.reload();
     logoutUser();
-    router.push("/");
+    // router.push("/");
   };
 
   return signOut;

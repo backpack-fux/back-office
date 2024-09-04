@@ -16,9 +16,13 @@ export default function Dashboard() {
   const { user } = useNeynarContext();
 
   useEffect(() => {
-    if (!user) {
-      setIsSignInModalOpen(true);
-    }
+    const timer = setTimeout(() => {
+      if (!user) {
+        setIsSignInModalOpen(true);
+      }
+    }, 0.5 * 1000);
+
+    return () => clearTimeout(timer);
   }, [user]);
 
   const handleCloseSignInModal = () => {
