@@ -89,4 +89,12 @@ export class PylonV2Service {
       credentials: "include",
     });
   }
+
+  public async logout(): Promise<void> {
+    return await this.request(`${this.apiBaseUrl}/v1/auth/jwt`, {
+      method: this.methods.DELETE,
+      headers: this.headers(false),
+      credentials: "include",
+    });
+  }
 }
