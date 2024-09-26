@@ -1,5 +1,6 @@
 // Enums
 export enum BridgePaymentRailEnum {
+  ETHEREUM = "ethereum",
   POLYGON = "polygon",
   ARBITRUM = "arbitrum",
   AVALANCHE = "avalanche",
@@ -59,6 +60,10 @@ export const prefundedNetworkOptions: Array<{
   key: BridgePaymentRailEnum;
   label: BridgePaymentRailEnum;
 }> = [
+  {
+    key: BridgePaymentRailEnum.ETHEREUM,
+    label: BridgePaymentRailEnum.ETHEREUM,
+  },
   {
     key: BridgePaymentRailEnum.POLYGON,
     label: BridgePaymentRailEnum.POLYGON,
